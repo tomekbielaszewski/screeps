@@ -4,16 +4,36 @@ module.exports = (function() {
 
     function harvest(creep) {
         if(creep.carry.energy < creep.carryCapacity) {
-            var source = creep.pos.findClosestByPath(FIND_SOURCES);
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
-            }
+            mine(creep);
         } else {
             var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
             var transferResult = creep.transfer(spawn, RESOURCE_ENERGY);
             if(transferResult == ERR_NOT_IN_RANGE) {
                 creep.moveTo(spawn);
             }
+
+            if(transferResult == ERR_INVALID_TARGET) {
+                creep.say('I cant transfer there...');
+            }
+            if(transferResult == ERR_FULL) {
+                creep.say('Container is full...');
+            }
+        }
+    }
+
+    function mine(creep) {
+        var source = creep.pos.findClosestByPath(FIND_SOURCES);
+        var harvestResult = creep.harvest(source);
+
+        if(harvestResult == ERR_NOT_IN_RANGE) {
+            creep.moveTo(source);
+        }
+
+        if(harvestResult == ERR_NOT_ENOUGH_RESOURCES) {
+            creep.say('Target has no resources...');
+        }
+        if(harvestResult == ERR_NO_BODYPART) {
+            creep.say('I cant do that... I have no WORK bodypart!');
         }
     }
 
@@ -26,8 +46,16 @@ module.exports = (function() {
         }
         else {
             var construction = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-            if(creep.build(construction) == ERR_NOT_IN_RANGE) {
+            var buildResult = creep.build(construction);
+            if(buildResult == ERR_NOT_IN_RANGE) {
                 creep.moveTo(construction);
+            }
+
+            if(buildResult == ERR_RCL_NOT_ENOUGH) {
+                creep.say('Your RCL is to low...');
+            }
+            if(buildResult == ERR_NO_BODYPART) {
+                creep.say('I cant do that... I have no WORK bodypart!');
             }
         }
     }
@@ -45,15 +73,24 @@ module.exports = (function() {
     }
 
     function carry(creep) {
-        var energyDrop = creep.pos.findClosestByPath(FIND_SOURCES);
+        var energyDrop = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY);
         if(creep.carry.energy < creep.carryCapacity &&
             energyDrop) {
-            //seek
+            if(creep.pickup(energyDrop) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(energyDrop);
+            }
         } else {
             var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
             var transferResult = creep.transfer(spawn, RESOURCE_ENERGY);
             if(transferResult == ERR_NOT_IN_RANGE) {
                 creep.moveTo(spawn);
+            }
+
+            if(transferResult == ERR_INVALID_TARGET) {
+                creep.say('I cant transfer there...');
+            }
+            if(transferResult == ERR_FULL) {
+                creep.say('Container is full...');
             }
         }
     }
@@ -61,6 +98,8 @@ module.exports = (function() {
     function workDispatcher(creep) {
         switch(creep.memory.type) {
             case UnitType.HARVESTER: harvest(creep);
+                break;
+            case UnitType.MINER: mine(creep);
                 break;
             case UnitType.BUILDER: build(creep);
                 break;
