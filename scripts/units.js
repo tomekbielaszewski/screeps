@@ -26,7 +26,7 @@ module.exports = (function() {
         }
         else {
             var construction = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-            if(creep.build(construction) == ERR_NOT_IN_RANGE) {
+            if(construction.my && creep.build(construction) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(construction);
             }
         }
@@ -45,7 +45,17 @@ module.exports = (function() {
     }
 
     function carry(creep) {
-
+        var energyDrop = creep.pos.findClosestByPath(FIND_SOURCES);
+        if(creep.carry.energy < creep.carryCapacity &&
+            energyDrop) {
+            //seek
+        } else {
+            var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
+            var transferResult = creep.transfer(spawn, RESOURCE_ENERGY);
+            if(transferResult == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
+            }
+        }
     }
 
     function workDispatcher(creep) {
