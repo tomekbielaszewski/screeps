@@ -5,5 +5,6 @@ module.exports = (function() {
         BUILDER: 'builder',
         GUARDIAN: 'guardian',
         CARRIER: 'carrier',
+        UPGRADER: 'upgrader'
     }
 }());

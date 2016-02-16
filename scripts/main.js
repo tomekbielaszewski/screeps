@@ -1,9 +1,9 @@
-var units = require('units');
+var job = require('unitJobs');
 
 module.exports.loop = function () {
 
 	for(var name in Game.creeps) {
 		var creep = Game.creeps[name];
-		units.work(creep);
+		job.work(creep);
 	}
 }

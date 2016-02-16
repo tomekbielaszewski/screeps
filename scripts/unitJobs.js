@@ -2,6 +2,21 @@ var UnitType = require('unitType');
 
 module.exports = (function() {
 
+    function upgrade(creep) {
+        if(creep.carry.energy == 0) {
+            var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
+            if(spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
+            }
+        } else {
+            if (creep.room.controller) {
+                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller);
+                }
+            }
+        }
+    }
+
     function harvest(creep) {
         if(creep.carry.energy < creep.carryCapacity) {
             mine(creep);
@@ -43,8 +58,7 @@ module.exports = (function() {
             if(spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(spawn);
             }
-        }
-        else {
+        } else {
             var construction = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
             var buildResult = creep.build(construction);
             if(buildResult == ERR_NOT_IN_RANGE) {
@@ -106,6 +120,8 @@ module.exports = (function() {
             case UnitType.GUARDIAN: guard(creep);
                 break;
             case UnitType.CARRIER: carry(creep);
+                break;
+            case UnitType.UPGRADER: upgrade(creep);
                 break;
         }
     }
