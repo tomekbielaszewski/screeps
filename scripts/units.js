@@ -13,10 +13,10 @@ module.exports = (function() {
             }
 
             if(transferResult == ERR_INVALID_TARGET) {
-                creep.say('I cant transfer there...');
+                creep.say('Cant transfer');
             }
             if(transferResult == ERR_FULL) {
-                creep.say('Container is full...');
+                creep.say('Full');
             }
         }
     }
@@ -30,10 +30,10 @@ module.exports = (function() {
         }
 
         if(harvestResult == ERR_NOT_ENOUGH_RESOURCES) {
-            creep.say('Target has no resources...');
+            creep.say('no resources');
         }
         if(harvestResult == ERR_NO_BODYPART) {
-            creep.say('I cant do that... I have no WORK bodypart!');
+            creep.say('no WORK');
         }
     }
 
@@ -52,10 +52,10 @@ module.exports = (function() {
             }
 
             if(buildResult == ERR_RCL_NOT_ENOUGH) {
-                creep.say('Your RCL is to low...');
+                creep.say('RCL to low');
             }
             if(buildResult == ERR_NO_BODYPART) {
-                creep.say('I cant do that... I have no WORK bodypart!');
+                creep.say('no WORK');
             }
         }
     }
@@ -87,10 +87,10 @@ module.exports = (function() {
             }
 
             if(transferResult == ERR_INVALID_TARGET) {
-                creep.say('I cant transfer there...');
+                creep.say('Cant transfer');
             }
             if(transferResult == ERR_FULL) {
-                creep.say('Container is full...');
+                creep.say('Full');
             }
         }
     }
