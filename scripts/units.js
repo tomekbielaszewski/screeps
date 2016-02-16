@@ -1,24 +1,27 @@
 var UnitType = require('unitType');
 
 module.exports = (function() {
+
     function harvest(creep) {
         if(creep.carry.energy < creep.carryCapacity) {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
+            var source = creep.pos.findClosestByPath(FIND_SOURCES);
+            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source);
             }
-        }
-        else {
-            if(creep.transfer(Game.spawns.Spawn1, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.spawns.Spawn1);
+        } else {
+            var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
+            var transferResult = creep.transfer(spawn, RESOURCE_ENERGY);
+            if(transferResult == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
             }
         }
     }
 
     function build(creep) {
         if(creep.carry.energy == 0) {
-            if(Game.spawns.Spawn1.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.spawns.Spawn1);
+            var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
+            if(spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
             }
         }
         else {
@@ -36,7 +39,8 @@ module.exports = (function() {
                 creep.moveTo(targets[0]);
             }
         } else {
-            creep.moveTo(Game.spawns.Spawn1.pos);
+            var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
+            creep.moveTo(spawn);
         }
     }
 
@@ -45,7 +49,7 @@ module.exports = (function() {
     }
 
     function workDispatcher(creep) {
-        switch(creep.type) {
+        switch(creep.memory.type) {
             case UnitType.HARVESTER: harvest(creep);
                 break;
             case UnitType.BUILDER: build(creep);
