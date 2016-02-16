@@ -13,7 +13,7 @@ module.exports = (function() {
 
         if(_.isString(result)) {
             console.log('The name is: '+result);
-            return Game.creeps[result];
+            return result;
         } else {
             console.log('Spawn error: '+result);
             return result
