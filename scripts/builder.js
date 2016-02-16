@@ -6,7 +6,7 @@ module.exports = function (creep) {
     		}
     	}
     	else {
-            var construction = creep.pos.findClosest(FIND_CONSTRUCTION_SITES);
+            var construction = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 			if(creep.build(construction) == ERR_NOT_IN_RANGE) {
 				creep.moveTo(construction);					
 			}
