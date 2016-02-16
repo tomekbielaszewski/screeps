@@ -3,7 +3,7 @@ module.exports = (function() {
 
     return {
         miner: function(spawn) {
-            Game.spawns[spawn].createCreep( [WORK, WORK, CARRY], 'Miner'+(counter++), { type: 'miner' } );
+            Game.spawns[spawn].createCreep( [WORK, WORK, MOVE], 'Miner'+(counter++), { type: 'miner' } );
         },
         harvester: function(spawn) {
             Game.spawns[spawn].createCreep( [WORK, WORK, CARRY, MOVE], 'Harvester'+(counter++), { type: 'harvester' } );
