@@ -3,6 +3,7 @@ module.exports = (function() {
         HARVESTER: 'harvester',
         MINER: 'miner',
         BUILDER: 'builder',
+        REPAIRER: 'repairer',
         GUARDIAN: 'guardian',
         CARRIER: 'carrier',
         UPGRADER: 'upgrader'
