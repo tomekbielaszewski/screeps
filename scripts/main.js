@@ -1,4 +1,6 @@
 var job = require('unitJobs');
+var unitManager = require('unitManager');
+var queue = require('unitTrainingQueue');
 
 module.exports.loop = function () {
 
@@ -6,4 +8,7 @@ module.exports.loop = function () {
 		var creep = Game.creeps[name];
 		job.work(creep);
 	}
+
+    unitManager.update();
+    queue.update();
 }

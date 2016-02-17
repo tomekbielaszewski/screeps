@@ -1,79 +1,85 @@
+var _ = require('lodash');
 var queue = require('unitTrainingQueue');
 var UnitType = require('unitType');
+var factory = require('unitFactory');
 
 module.exports = (function() {
     var needs = [
             {
-                type: UnitType.MINER,
+                type: UnitType.HARVESTER,
                 need: 1
             },
             {
                 type: UnitType.MINER,
-                need: 1
+                need: 2
             },
             {
                 type: UnitType.CARRIER,
-                need: 1
+                need: 3
             },
             {
                 type: UnitType.BUILDER,
-                need: 1
+                need: 2
             },
             {
                 type: UnitType.UPGRADER,
                 need: 1
             },
             {
-                type: UnitType.GUARDIAN,
-                need: 1
+                type: UnitType.REPAIRER,
+                need: 2
             },
             {
-                type: UnitType.HARVESTER,
-                need: 1
+                type: UnitType.GUARDIAN,
+                need: 3
             }
         ];
 
     function countCreeps(type) {
-        var count = 0;
-        for(var name in Game.creeps) {
-            var creep = Game.creeps[name];
-            if(creep.memory.type == type) {
-                count++;
-            }
-        }
-        return count;
+        return _.reduce(Game.creeps, function(sum, creep){
+            return sum + (creep.type === type) ? 1 : 0;
+        }, 0);
     }
 
     function createIfNeeded() {
-        for(var i in needs) {
-            var tuple = needs[i];
-            var presentAmount = countCreeps(tuple.type);
-
-            if(tuple.need > presentAmount) {
-                queue.equeue(); //TODO: equeue unit creation order - pass function from unitFactory for now. Fix later
+        _(needs).forEach(function(need){
+            var currentlyHave = countCreeps(need.type);
+            if(need.need > currentlyHave) {
+                createUnit(need.type);
             }
-        }
+        });
     }
 
-    function setNeed(type, need) {
-        for(var i in needs) {
-            var tuple = needs[i];
-            if(tuple.type == type) {
-                tuple.need = need;
-                return tuple;
-            }
+    function createUnit(type) {
+        console.log('Manager creating ' + type);
+        var creator = getCreator(type);
+        queue.enqueue(creator, _.isString); //TODO: equeue unit creation order - pass function from unitFactory for now. Fix later
+    }
+
+    function getCreator(type) {
+        switch(type) {
+            case UnitType.HARVESTER: return factory.harvester;
+            case UnitType.MINER: return factory.miner;
+            case UnitType.BUILDER: return factory.builder;
+            case UnitType.GUARDIAN: return factory.guardian;
+            case UnitType.CARRIER: return factory.carrier;
+            case UnitType.UPGRADER: return factory.upgrader;
         }
-        throw 'unknown type ' + type;
     }
 
     function getNeed(type) {
-        for(var i in needs) {
-            var tuple = needs[i];
-            if(tuple.type == type) {
-                return tuple;
-            }
+        var foundNeed = _.find(needs, function(need){
+            return need.type === type;
+        });
+        if(foundNeed) {
+            return foundNeed;
+        } else {
+            throw 'unknown type ' + type;
         }
-        throw 'unknown type ' + type;
+    }
+
+    function setNeed(type, newNeed) {
+        getNeed(type).need = newNeed;
     }
 
     function getAllNeeds() {
@@ -84,6 +90,7 @@ module.exports = (function() {
         update: createIfNeeded,
         setNeed: setNeed,
         getNeed: getNeed,
-        getAllNeeds: getAllNeeds
+        getAllNeeds: getAllNeeds,
+        createUnit: createUnit
     }
 }());
