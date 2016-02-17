@@ -7,7 +7,7 @@ module.exports = (function() {
             spawn = Game.spawns[spawn];
         }
 
-        var amountOfCreeps = Game.creeps.length
+        var amountOfCreeps = _(Memmory.creeps).size();
         var result = spawn.createCreep( body, name+(amountOfCreeps), { type: type } );
 
         if(_.isString(result)) {
