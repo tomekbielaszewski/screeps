@@ -39,6 +39,10 @@ module.exports = (function() {
         },
         upgrader: function(spawn) {
             return create(spawn, [WORK, CARRY, CARRY, MOVE], 'Upgrader', UnitType.UPGRADER);
+        },
+
+        custom: function(spawn, body, name, type) {
+            return create(spawn, body, name, type);
         }
     }
 }());
