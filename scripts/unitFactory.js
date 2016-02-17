@@ -2,14 +2,13 @@ var _ = require('lodash');
 var UnitType = require('unitType');
 
 module.exports = (function() {
-    var counter = 5;
-
     function create(spawn, body, name, type) {
         if(_.isString(spawn)) {
             spawn = Game.spawns[spawn];
         }
 
-        var result = spawn.createCreep( body, name+(counter++), { type: type } );
+        var amountOfCreeps = Game.creeps.length
+        var result = spawn.createCreep( body, name+(amountOfCreeps), { type: type } );
 
         if(_.isString(result)) {
             console.log('The name is: '+result);
