@@ -36,22 +36,27 @@ module.exports = (function() {
         ];
 
     function countCreeps(type) {
-        return _.reduce(Game.creeps, function(sum, creep){
-            return sum + (creep.type === type) ? 1 : 0;
-        }, 0);
+        var counter = 0;
+        for(var name in Game.creeps) {
+            var creep = Game.creeps[name];
+            if(creep.memory.type === type) {
+                counter++;
+            }
+        }
+        return counter;
     }
 
     function createIfNeeded() {
-        _(needs).forEach(function(need){
+        _.forEach(needs, function(need){
             var currentlyHave = countCreeps(need.type);
             if(need.need > currentlyHave) {
+                console.log('Not enough '+need.type+'('+currentlyHave+'). Creating! You need to have ' + need.need);
                 createUnit(need.type);
             }
         });
     }
 
     function createUnit(type) {
-        console.log('Manager creating ' + type);
         var creator = getCreator(type);
         queue.enqueue(creator, _.isString); //TODO: equeue unit creation order - pass function from unitFactory for now. Fix later
     }

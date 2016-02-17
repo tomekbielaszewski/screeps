@@ -11,10 +11,10 @@ module.exports = (function() {
         var result = spawn.createCreep( body, name+(amountOfCreeps), { type: type } );
 
         if(_.isString(result)) {
-            console.log('The name is: '+result);
+            //console.log('The name is: '+result);
             return result;
         } else {
-            console.log('Spawn error: '+result);
+            //console.log('Spawn error: '+result);
             return result
         }
     }
