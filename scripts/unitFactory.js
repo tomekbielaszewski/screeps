@@ -8,21 +8,12 @@ module.exports = (function () {
     }
 
     var amountOfCreeps = _(Memory.creeps).size();
-    var result = spawn.createCreep(body, name + (amountOfCreeps), {type: type});
-
-    if (_.isString(result)) {
-      //console.log('The name is: '+result);
-      return result;
-    } else {
-      //console.log('Spawn error: '+result);
-      return result
-    }
+    return spawn.createCreep(body, name + (amountOfCreeps), {type: type});
   }
 
   return {
     miner: function (spawn) {
       return create(spawn, [WORK, WORK, MOVE], 'Miner', UnitType.MINER);
-      //return Game.spawns[spawn].createCreep( [WORK, WORK, MOVE], 'Miner'+(counter++), { type: 'miner' } );
     },
     harvester: function (spawn) {
       return create(spawn, [WORK, WORK, CARRY, MOVE], 'Harvester', UnitType.HARVESTER);
@@ -40,7 +31,7 @@ module.exports = (function () {
       return create(spawn, [CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], 'Carrier', UnitType.CARRIER);
     },
     upgrader: function (spawn) {
-      return create(spawn, [WORK, CARRY, CARRY, MOVE, MOVE], 'Upgrader', UnitType.UPGRADER);
+      return create(spawn, [WORK, WORK, CARRY, MOVE], 'Upgrader', UnitType.UPGRADER);
     },
 
     custom: function (spawn, body, name, type) {

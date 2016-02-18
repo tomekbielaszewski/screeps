@@ -74,16 +74,17 @@ module.exports = (function () {
     }
   }
 
-  function repair(creep) { //TODO: its copied from builder
+  function repair(creep) {
     if (creep.carry.energy == 0) {
       var spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
       if (spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
         creep.moveTo(spawn);
       }
     } else {
-      var construction = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
-        filter: function (i) {
-          return i.hits < i.hitsMax / 2;
+      var construction = creep.room.find(FIND_STRUCTURES, {
+        filter: function (s) {
+          return (s.my || s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_ROAD) &&
+            s.hits < s.hitsMax / 2;
         }
       });
       if (construction) {

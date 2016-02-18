@@ -4,33 +4,40 @@ var UnitType = require('unitType');
 
 module.exports = (function () {
   //TODO: Store needs in memory as it is in Queue
-  var needs = [//lower in array - the higher priority
+  var needs = [
     {
       type: UnitType.GUARDIAN,
+      priority: 1,
       need: 3
     },
     {
       type: UnitType.REPAIRER,
+      priority: 1,
       need: 2
     },
     {
       type: UnitType.BUILDER,
+      priority: 1,
       need: 1
     },
     {
       type: UnitType.UPGRADER,
+      priority: 2,
       need: 1
     },
     {
       type: UnitType.CARRIER,
+      priority: 2,
       need: 3
     },
     {
       type: UnitType.MINER,
+      priority: 2,
       need: 2
     },
     {
       type: UnitType.HARVESTER,
+      priority: 3,
       need: 1
     },
   ];
@@ -51,13 +58,9 @@ module.exports = (function () {
       var currentlyHave = countCreeps(need.type);
       if (need.need > currentlyHave) {
         console.log('Not enough ' + need.type + '(' + currentlyHave + '). Creating! You need to have ' + need.need);
-        createUnit(need.type);
+        queue.enqueue(need.type, need.priority);
       }
     });
-  }
-
-  function createUnit(type) {
-    queue.enqueue(type);
   }
 
   function getNeed(type) {
@@ -84,6 +87,6 @@ module.exports = (function () {
     setNeed: setNeed,
     getNeed: getNeed,
     getAllNeeds: getAllNeeds,
-    createUnit: createUnit
+    count: countCreeps
   }
 }());

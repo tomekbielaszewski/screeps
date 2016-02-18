@@ -6,9 +6,9 @@ module.exports = (function () { //TODO add priorities to queue - sometimes game 
   function update() {
     if (getQueue().length > 0) {
       var queueElement = getQueue().pop();
-      console.log('Trying to create ' + queueElement);
+      console.log('Trying to create ' + queueElement.type);
       if (queueElement) {
-        var result = factory[queueElement]('Home'); //TODO: remove spawn declaration!
+        var result = factory[queueElement.type]('Home'); //TODO: remove spawn declaration!
         if (!_.isString(result)) {
           console.log('Unsuccessful ' + result);
           getQueue().push(queueElement);
@@ -16,22 +16,32 @@ module.exports = (function () { //TODO add priorities to queue - sometimes game 
           console.log('Created ' + result);
         }
       }
-      console.log(getQueue());
+      console.log(JSON.stringify(getQueue()));
     }
   }
 
-  function enqueue(type) {
+  function enqueue(type, priority) {
     var el = _.find(getQueue(), function (el) {
-      return el === type;
+      return el.type === type;
     });
     if (!el) {
-      getQueue().push(queueElement(type));
+      getQueue().push(createQueueElement(type, priority));
+      sortByPriority(getQueue());
       console.log(type + " added! Queue length: " + getQueue().length);
     }
   }
 
-  function queueElement(type) {
-    return type
+  function sortByPriority(queue) {
+    setQueue(_.sortBy(queue, function (q) {
+      return q.priority
+    }))
+  }
+
+  function createQueueElement(type, prioroty) {
+    return {
+      type: type,
+      priority: prioroty
+    }
   }
 
   function getQueue() {
