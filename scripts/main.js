@@ -12,5 +12,5 @@ module.exports.loop = function () {
 	unitManager.update();
 	queue.update();
 
-	console.log('#############');
+	console.log('############# ' + Game.time);
 }

@@ -8,9 +8,9 @@ module.exports = (function () {
       var queueElement = getQueue().pop();
       console.log('Trying to create ' + queueElement);
       if (queueElement) {
-        var result = factory[queueElement]('Home');
-        //var result = queueElement.creator('Home'); //TODO: remove spawn declaration!
+        var result = factory[queueElement]('Home'); //TODO: remove spawn declaration!
         if (!_.isString(result)) {
+          console.log('Unsuccessful ' + result);
           getQueue().push(queueElement);
         } else {
           console.log('Created ' + result);

@@ -114,9 +114,8 @@ module.exports = (function() {
 
     function carry(creep) {
         var energyDrop = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
-        if(creep.carry.energy < creep.carryCapacity &&
-            energyDrop) {
-            if(creep.pickup(energyDrop) == ERR_NOT_IN_RANGE) {
+        if(creep.carry.energy < creep.carryCapacity) {
+            if(energyDrop && creep.pickup(energyDrop) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(energyDrop);
             }
         } else {
