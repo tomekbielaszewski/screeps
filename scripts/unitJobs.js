@@ -94,6 +94,7 @@ module.exports = (function() {
         //        creep.say('no WORK');
         //    }
         //}
+        creep.moveTo(Game.flags.idle);
     }
 
     function guard(creep) {
@@ -103,8 +104,7 @@ module.exports = (function() {
                 creep.moveTo(targets[0]);
             }
         } else {
-            var spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
-            creep.moveTo(spawn);
+            creep.moveTo(Game.flags.idle);
         }
     }
 

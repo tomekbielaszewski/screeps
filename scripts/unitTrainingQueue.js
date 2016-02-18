@@ -1,43 +1,56 @@
-var unitFactory = require('unitFactory');
-var UnitType = require('unitType');
 var _ = require('lodash');
+var factory = require('unitFactory');
 
 module.exports = (function () {
-    var queue = [];
+  //var queue = Memory.queue || [];
 
-    function update() {
-        queue = _.uniq(queue);
-        console.log("Queue length: " + queue.length);
-        var queueElement = queue.shift();
-        if(queueElement) {
-            var result = queueElement.creator('Home'); //TODO: remove spawn declaration!
-            if(!queueElement.success(result)) {
-                console.log('Queued creation unsuccessful. Result: ' + result);
-                queue.unshift(queueElement);
-            } else {
-                console.log('Created ' + result);
-            }
-        }
+  function update() {
+    var queueElement = getQueue().pop();
+    console.log('Trying to create ' + queueElement);
+    if (queueElement) {
+      var result = factory[queueElement]('Home');
+      //var result = queueElement.creator('Home'); //TODO: remove spawn declaration!
+      if (!_.isString(result)) {
+        getQueue().push(queueElement);
+      } else {
+        console.log('Created ' + result);
+      }
     }
+    console.log(getQueue());
+  }
 
-    function enqueue(creator, success) {
-        queue.push(queueElement(creator, success));
+  function enqueue(type) {
+    var el = _.find(getQueue(), function (el) {
+      return el === type;
+    });
+    if (!el) {
+      getQueue().push(queueElement(type));
+      console.log(type + " added! Queue length: " + getQueue().length);
     }
+  }
 
-    function clear() {
-        queue = [];
-    }
+  function queueElement(type) {
+    return type
+  }
 
-    function queueElement(creator, success) {
-        return {
-            creator: creator,
-            success: success
-        }
+  function getQueue() {
+    if(!Memory.queue) {
+      clear();
     }
+    return Memory.queue;
+  }
 
-    return {
-        update: update,
-        enqueue: enqueue,
-        clear: clear
-    }
+  function clear() {
+    setQueue([]);
+  }
+
+  function setQueue(queue) {
+    Memory.queue = queue;
+  }
+
+  return {
+    update: update,
+    enqueue: enqueue,
+    clear: clear
+  }
 }());

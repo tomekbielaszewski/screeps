@@ -1,21 +1,17 @@
 var _ = require('lodash');
 var queue = require('unitTrainingQueue');
 var UnitType = require('unitType');
-var factory = require('unitFactory');
 
 module.exports = (function() {
-    var needs = [
+    //TODO: Store needs in memory as it is in Queue
+    var needs = [//lower in array - the higher priority
             {
-                type: UnitType.HARVESTER,
-                need: 1
-            },
-            {
-                type: UnitType.MINER,
-                need: 2
-            },
-            {
-                type: UnitType.CARRIER,
+                type: UnitType.GUARDIAN,
                 need: 3
+            },
+            {
+                type: UnitType.REPAIRER,
+                need: 2
             },
             {
                 type: UnitType.BUILDER,
@@ -26,13 +22,17 @@ module.exports = (function() {
                 need: 1
             },
             {
-                type: UnitType.REPAIRER,
+                type: UnitType.CARRIER,
+                need: 3
+            },
+            {
+                type: UnitType.MINER,
                 need: 2
             },
             {
-                type: UnitType.GUARDIAN,
-                need: 3
-            }
+                type: UnitType.HARVESTER,
+                need: 1
+            },
         ];
 
     function countCreeps(type) {
@@ -57,19 +57,7 @@ module.exports = (function() {
     }
 
     function createUnit(type) {
-        var creator = getCreator(type);
-        queue.enqueue(creator, _.isString); //TODO: equeue unit creation order - pass function from unitFactory for now. Fix later
-    }
-
-    function getCreator(type) {
-        switch(type) {
-            case UnitType.HARVESTER: return factory.harvester;
-            case UnitType.MINER: return factory.miner;
-            case UnitType.BUILDER: return factory.builder;
-            case UnitType.GUARDIAN: return factory.guardian;
-            case UnitType.CARRIER: return factory.carrier;
-            case UnitType.UPGRADER: return factory.upgrader;
-        }
+        queue.enqueue(type); //TODO: equeue unit creation order - pass function from unitFactory for now. Fix later
     }
 
     function getNeed(type) {
