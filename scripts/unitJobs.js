@@ -74,27 +74,31 @@ module.exports = (function() {
         }
     }
 
-    function repairer(creep) { //TODO: its copied from builder
-        //if(creep.carry.energy == 0) {
-        //    var spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
-        //    if(spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
-        //        creep.moveTo(spawn);
-        //    }
-        //} else {
-        //    var construction = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-        //    var buildResult = creep.build(construction);
-        //    if(buildResult == ERR_NOT_IN_RANGE) {
-        //        creep.moveTo(construction);
-        //    }
-        //
-        //    if(buildResult == ERR_RCL_NOT_ENOUGH) {
-        //        creep.say('RCL to low');
-        //    }
-        //    if(buildResult == ERR_NO_BODYPART) {
-        //        creep.say('no WORK');
-        //    }
-        //}
-        creep.moveTo(Game.flags.idle);
+    function repair(creep) { //TODO: its copied from builder
+        if(creep.carry.energy == 0) {
+            var spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+            if(spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
+            }
+        } else {
+            var construction = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
+                filter: function(i) {
+                    return i.hits < i.hitsMax / 2;
+                }
+            });
+            if(construction) {
+                var repairResult = creep.repair(construction);
+                if (repairResult == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(construction);
+                }
+
+                if (repairResult == ERR_NO_BODYPART) {
+                    creep.say('no WORK');
+                }
+            } else {
+                creep.moveTo(Game.flags.idle);
+            }
+        }
     }
 
     function guard(creep) {
@@ -138,6 +142,8 @@ module.exports = (function() {
             case UnitType.MINER: mine(creep);
                 break;
             case UnitType.BUILDER: build(creep);
+                break;
+            case UnitType.REPAIRER: repair(creep);
                 break;
             case UnitType.GUARDIAN: guard(creep);
                 break;

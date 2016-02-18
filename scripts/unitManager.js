@@ -15,7 +15,7 @@ module.exports = (function() {
             },
             {
                 type: UnitType.BUILDER,
-                need: 2
+                need: 1
             },
             {
                 type: UnitType.UPGRADER,

@@ -2,21 +2,22 @@ var _ = require('lodash');
 var factory = require('unitFactory');
 
 module.exports = (function () {
-  //var queue = Memory.queue || [];
 
   function update() {
-    var queueElement = getQueue().pop();
-    console.log('Trying to create ' + queueElement);
-    if (queueElement) {
-      var result = factory[queueElement]('Home');
-      //var result = queueElement.creator('Home'); //TODO: remove spawn declaration!
-      if (!_.isString(result)) {
-        getQueue().push(queueElement);
-      } else {
-        console.log('Created ' + result);
+    if(getQueue().length > 0) {
+      var queueElement = getQueue().pop();
+      console.log('Trying to create ' + queueElement);
+      if (queueElement) {
+        var result = factory[queueElement]('Home');
+        //var result = queueElement.creator('Home'); //TODO: remove spawn declaration!
+        if (!_.isString(result)) {
+          getQueue().push(queueElement);
+        } else {
+          console.log('Created ' + result);
+        }
       }
+      console.log(getQueue());
     }
-    console.log(getQueue());
   }
 
   function enqueue(type) {

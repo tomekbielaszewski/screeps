@@ -40,7 +40,7 @@ module.exports = (function() {
             return create(spawn, [CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], 'Carrier', UnitType.CARRIER);
         },
         upgrader: function(spawn) {
-            return create(spawn, [WORK, CARRY, CARRY, MOVE], 'Upgrader', UnitType.UPGRADER);
+            return create(spawn, [WORK, CARRY, CARRY, MOVE, MOVE], 'Upgrader', UnitType.UPGRADER);
         },
 
         custom: function(spawn, body, name, type) {
