@@ -4,7 +4,7 @@ var factory = require('unitFactory');
 module.exports = (function () {
 
   function update() {
-    if(getQueue().length > 0) {
+    if (getQueue().length > 0) {
       var queueElement = getQueue().pop();
       console.log('Trying to create ' + queueElement);
       if (queueElement) {
@@ -35,7 +35,7 @@ module.exports = (function () {
   }
 
   function getQueue() {
-    if(!Memory.queue) {
+    if (!Memory.queue) {
       clear();
     }
     return Memory.queue;
