@@ -57,7 +57,7 @@ module.exports = (function () {
   }
 
   function createUnit(type) {
-    queue.enqueue(type); //TODO: equeue unit creation order - pass function from unitFactory for now. Fix later
+    queue.enqueue(type);
   }
 
   function getNeed(type) {
