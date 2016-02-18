@@ -1,6 +1,7 @@
 var job = require('unitJobs');
 var unitManager = require('unitManager');
 var queue = require('unitTrainingQueue');
+var unitCost = require('unitCost');
 
 module.exports.loop = function () {
 
