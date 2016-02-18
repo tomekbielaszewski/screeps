@@ -13,7 +13,7 @@ module.exports = (function () {
     {
       type: UnitType.REPAIRER,
       priority: 1,
-      need: 2
+      need: 3
     },
     {
       type: UnitType.BUILDER,
@@ -23,7 +23,7 @@ module.exports = (function () {
     {
       type: UnitType.UPGRADER,
       priority: 2,
-      need: 1
+      need: 2
     },
     {
       type: UnitType.CARRIER,
@@ -57,7 +57,7 @@ module.exports = (function () {
     _.forEach(needs, function (need) {
       var currentlyHave = countCreeps(need.type);
       if (need.need > currentlyHave) {
-        console.log('Not enough ' + need.type + '(' + currentlyHave + '). Creating! You need to have ' + need.need);
+        console.log('Not enough ' + need.type + ' (' + currentlyHave + '/' + need.need + ')');
         queue.enqueue(need.type, need.priority);
       }
     });

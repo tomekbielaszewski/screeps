@@ -21,17 +21,25 @@ module.exports = (function () {
     if (creep.carry.energy < creep.carryCapacity) {
       mine(creep);
     } else {
-      var spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
-      var transferResult = creep.transfer(spawn, RESOURCE_ENERGY);
-      if (transferResult == ERR_NOT_IN_RANGE) {
-        creep.moveTo(spawn);
-      }
+      var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+        filter: function (s) {
+          return (s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
+            s.structureType == STRUCTURE_LINK) &&
+            (s.energy < s.energyCapacity)
+        }
+      });
+      if(structure) {
+        var transferResult = creep.transfer(structure, RESOURCE_ENERGY);
+        if (transferResult == ERR_NOT_IN_RANGE) {
+          creep.moveTo(structure);
+        }
 
-      if (transferResult == ERR_INVALID_TARGET) {
-        creep.say('Cant transfer');
-      }
-      if (transferResult == ERR_FULL) {
-        creep.say('Full');
+        if (transferResult == ERR_INVALID_TARGET) {
+          creep.say('Cant transfer');
+        }
+        if (transferResult == ERR_FULL) {
+          creep.say('Full');
+        }
       }
     }
   }
@@ -81,7 +89,7 @@ module.exports = (function () {
         creep.moveTo(spawn);
       }
     } else {
-      var construction = creep.room.find(FIND_STRUCTURES, {
+      var construction = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: function (s) {
           return (s.my || s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_ROAD) &&
             s.hits < s.hitsMax / 2;
@@ -120,17 +128,25 @@ module.exports = (function () {
         creep.moveTo(energyDrop);
       }
     } else {
-      var spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
-      var transferResult = creep.transfer(spawn, RESOURCE_ENERGY);
-      if (transferResult == ERR_NOT_IN_RANGE) {
-        creep.moveTo(spawn);
-      }
+      var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+        filter: function (s) {
+          return (s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
+            s.structureType == STRUCTURE_LINK) &&
+            (s.energy < s.energyCapacity)
+        }
+      });
+      if(structure) {
+        var transferResult = creep.transfer(structure, RESOURCE_ENERGY);
+        if (transferResult == ERR_NOT_IN_RANGE) {
+          creep.moveTo(structure);
+        }
 
-      if (transferResult == ERR_INVALID_TARGET) {
-        creep.say('Cant transfer');
-      }
-      if (transferResult == ERR_FULL) {
-        creep.say('Full');
+        if (transferResult == ERR_INVALID_TARGET) {
+          creep.say('Cant transfer');
+        }
+        if (transferResult == ERR_FULL) {
+          creep.say('Full');
+        }
       }
     }
   }
