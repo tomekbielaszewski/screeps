@@ -23,9 +23,13 @@ module.exports = (function () {
     } else {
       var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
         filter: function (s) {
-          return (s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
+          if ((s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
             s.structureType == STRUCTURE_LINK) &&
-            (s.energy < s.energyCapacity)
+            (s.energy < s.energyCapacity)) {
+            return true
+          } else {
+            return s.structureType == STRUCTURE_STORAGE && (s.store < s.storeCapacity)
+          }
         }
       });
       if(structure) {
@@ -130,9 +134,13 @@ module.exports = (function () {
     } else {
       var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
         filter: function (s) {
-          return (s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
+          if ((s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
             s.structureType == STRUCTURE_LINK) &&
-            (s.energy < s.energyCapacity)
+            (s.energy < s.energyCapacity)) {
+            return true
+          } else {
+            return s.structureType == STRUCTURE_STORAGE && (s.store < s.storeCapacity)
+          }
         }
       });
       if(structure) {
