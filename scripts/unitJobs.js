@@ -49,7 +49,11 @@ module.exports = (function () {
   }
 
   function mine(creep) {
-    var source = creep.pos.findClosestByRange(FIND_SOURCES);
+    var source = creep.pos.findClosestByRange(FIND_SOURCES, {
+      filter: function(s) {
+        return !isSourceSorroundedByCreeps(s);
+      }
+    });
     var harvestResult = creep.harvest(source);
 
     if (harvestResult == ERR_NOT_IN_RANGE) {
@@ -62,6 +66,10 @@ module.exports = (function () {
     if (harvestResult == ERR_NO_BODYPART) {
       creep.say('no WORK');
     }
+  }
+
+  function isSourceSorroundedByCreeps(source) {
+    return false;//source.pos
   }
 
   function build(creep) {
