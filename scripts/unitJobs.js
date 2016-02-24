@@ -1,4 +1,5 @@
 var UnitType = require('unitType');
+var harvester = require('job-harvester');
 
 module.exports = (function () {
 
@@ -18,34 +19,7 @@ module.exports = (function () {
   }
 
   function harvest(creep) {
-    if (creep.carry.energy < creep.carryCapacity) {
-      mine(creep);
-    } else {
-      var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-        filter: function (s) {
-          if ((s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION ||
-            s.structureType == STRUCTURE_LINK) &&
-            (s.energy < s.energyCapacity)) {
-            return true
-          } else {
-            return s.structureType == STRUCTURE_STORAGE && (s.store < s.storeCapacity)
-          }
-        }
-      });
-      if(structure) {
-        var transferResult = creep.transfer(structure, RESOURCE_ENERGY);
-        if (transferResult == ERR_NOT_IN_RANGE) {
-          creep.moveTo(structure);
-        }
-
-        if (transferResult == ERR_INVALID_TARGET) {
-          creep.say('Cant transfer');
-        }
-        if (transferResult == ERR_FULL) {
-          creep.say('Full');
-        }
-      }
-    }
+    harvester.work(creep);
   }
 
   function mine(creep) {
@@ -147,7 +121,7 @@ module.exports = (function () {
             (s.energy < s.energyCapacity)) {
             return true
           } else {
-            return s.structureType == STRUCTURE_STORAGE && (s.store < s.storeCapacity)
+            return s.structureType == STRUCTURE_STORAGE && (s.store.energy < s.storeCapacity)
           }
         }
       });
