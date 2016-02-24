@@ -2,11 +2,11 @@ module.exports = (function () {
 
   function work(creep) {
     if (!isCreepCapacityFull(creep)) {
-      var source = findSource(creep);
-      harvest(creep, source);
-    } else {
       var storage = findStorage(creep);
       transferEnergy(creep, storage);
+    } else {
+      var source = findSource(creep);
+      harvest(creep, source);
     }
   }
 
