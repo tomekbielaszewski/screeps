@@ -1,6 +1,7 @@
 var job = require('unitJobs');
 var unitManager = require('unitManager');
 var queue = require('unitTrainingQueue');
+var stats = require('stats');
 //var unitCost = require('unitCost');
 
 module.exports.loop = function () {
@@ -22,5 +23,5 @@ module.exports.loop = function () {
   unitManager.update();
   queue.update();
 
-  console.log('############# ' + Game.time);
+  stats.print();
 }

@@ -7,10 +7,8 @@ module.exports = (function () {
       var construction = service.find.withCache.constructionSite(creep);
       build(construction, creep);
     } else {
-      var spawn = service.find.withCache.storage(creep);
-      if (spawn.transferEnergy(creep) == ERR_NOT_IN_RANGE) {
-        service.goTo(spawn.pos, creep);
-      }
+      var storage = service.find.withCache.storage(creep);
+      takeResources(storage, creep);
     }
   }
 
@@ -23,13 +21,17 @@ module.exports = (function () {
 
     if (buildResult == ERR_NOT_IN_RANGE) {
       service.goTo(construction.pos, creep);
-    }
-
-    if (buildResult == ERR_RCL_NOT_ENOUGH) {
+    } else if (buildResult == ERR_RCL_NOT_ENOUGH) {
       creep.say('RCL to low');
-    }
-    if (buildResult == ERR_NO_BODYPART) {
+    } else if (buildResult == ERR_NO_BODYPART) {
       creep.say('no [WORK]');
+    }
+  }
+
+  function takeResources(storage, creep) {
+    var transferResult = storage.transferEnergy(creep);
+    if (transferResult == ERR_NOT_IN_RANGE) {
+      service.goTo(storage.pos, creep);
     }
   }
 

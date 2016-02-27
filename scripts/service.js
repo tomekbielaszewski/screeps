@@ -1,8 +1,11 @@
 module.exports = (function () {
 
   function findStorage(creep) {
-    if (creep.memory.structure && creep.memory.structure.structureType == STRUCTURE_STORAGE) {
-      return Game.getObjectById(creep.memory.structure.id);
+    if (creep.memory.structure && creep.memory.structure.structureType == STRUCTURE_STORAGE) { //What if builder is building a storage - construction site will have structureType = 'storage'
+      var storage = Game.getObjectById(creep.memory.structure.id);
+      if(storage) {
+        return storage;
+      }
     }
     return findStructureType(creep, FIND_MY_STRUCTURES, STRUCTURE_STORAGE);
   }
