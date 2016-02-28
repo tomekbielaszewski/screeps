@@ -13,12 +13,12 @@ module.exports = (function () {
     return cached || inGame;
   }
 
-  function findAny(creep, finder, validator) {
+  function findAny(creep, finder, validator, filter) {
     var cached = findInCache(creep, validator);
     var inGame;
 
     if(!cached) {
-      inGame = findClosestInGame(creep, finder);
+      inGame = findClosestInGame(creep, finder, filter);
     }
 
     return cached || inGame;
