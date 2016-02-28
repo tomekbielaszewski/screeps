@@ -5,12 +5,20 @@ module.exports = (function () {
   function work(creep) {
     var targets = creep.room.find(FIND_HOSTILE_CREEPS);
     if (targets.length) {
-      if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {
-        service.goTo(targets[0].pos, creep);
-      }
+      attackTarget(creep, targets);
     } else {
-      service.goTo(Game.flags.idle.pos, creep, true);
+      idle(creep);
     }
+  }
+
+  function attackTarget(creep, targets) {
+    if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {
+      service.goTo(targets[0].pos, creep);
+    }
+  }
+
+  function idle(creep) {
+    service.goTo(Game.flags.idle.pos, creep, true);
   }
 
   return {
