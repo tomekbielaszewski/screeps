@@ -54,14 +54,15 @@ module.exports = (function () {
     }
   }
 
-  function goTo(target, creep) {
+  function goTo(target, creep, doNotCheckIfStuck) {
+    var _canStuck = !doNotCheckIfStuck;
     if (!target instanceof RoomPosition) {
       throw 'Given target is not an instance of RoomPosition!'
     }
-    if (!(isEqual(target, creep.memory.target)) || stuck(creep)) {
+    if (!(isEqual(target, creep.memory.target)) || (_canStuck && stuck(creep))) {
       console.log(creep.name + ' pathfind..');
       creep.memory.target = target;
-      creep.memory.path = creep.pos.findPathTo(target);
+      creep.memory.path = Room.serializePath(creep.pos.findPathTo(target));
     }
     creep.moveByPath(creep.memory.path);
   }
