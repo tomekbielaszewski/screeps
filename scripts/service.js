@@ -1,38 +1,57 @@
 module.exports = (function () {
 
-  function findStorage(creep) {
-    if (creep.memory.structure && creep.memory.structure.structureType == STRUCTURE_STORAGE) { //What if builder is building a storage - construction site will have structureType = 'storage'
-      var storage = Game.getObjectById(creep.memory.structure.id);
-      if(storage) {
-        return storage;
-      }
-    }
-    return findStructureType(creep, FIND_MY_STRUCTURES, STRUCTURE_STORAGE);
-  }
-
   function findConstructionSite(creep) {
-    if (creep.memory.structure) {
-      var construction = Game.getObjectById(creep.memory.structure.id);
-      if (construction instanceof ConstructionSite && (construction.progress < construction.progressTotal)) {
-        return construction;
-      }
+    var cached = findInCache(creep, function(obj) {
+      return (obj.progress && obj.progressTotal) && (obj.progress < obj.progressTotal);
+    });
+    var inGame;
+
+    if(!cached) {
+      inGame = findClosestInGame(creep, FIND_MY_CONSTRUCTION_SITES);
     }
-    return findStructure(creep, FIND_MY_CONSTRUCTION_SITES);
+
+    return cached || inGame;
   }
 
-  function findStructureType(creep, finder, structureType) {
-    var filter = function (s) {
-      return structureType ? s.structureType == structureType : true;
-    };
-    return findStructure(creep, finder, filter);
+  function findAny(creep, finder, validator) {
+    var cached = findInCache(creep, validator);
+    var inGame;
+
+    if(!cached) {
+      inGame = findClosestInGame(creep, finder);
+    }
+
+    return cached || inGame;
   }
 
-  function findStructure(creep, finder, filter) {
-    var structure = creep.pos.findClosestByRange(finder, {
+  function findStructure(creep, finder, structureType) {
+    var cached = findInCache(creep, function(obj) {
+      return obj.structureType === structureType;
+    });
+    var inGame;
+
+    if(!cached) {
+      inGame = findClosestInGame(creep, finder, function(s){
+        return structureType ? s.structureType === structureType : true;
+      });
+    }
+
+    return cached || inGame;
+  }
+
+  function findClosestInGame(creep, finder, filter) {
+    var _object = creep.pos.findClosestByRange(finder, {
       filter: filter
     });
-    creep.memory.structure = structure;
-    return structure;
+    creep.memory.finderCache = _object;
+    return _object;
+  }
+
+  function findInCache(creep, validator) {
+    var _object = creep.memory.finderCache;
+    if(_object && validator(_object)) {
+      return Game.getObjectById(creep.memory.finderCache);
+    }
   }
 
   function goTo(target, creep) {
@@ -73,12 +92,9 @@ module.exports = (function () {
 
   return {
     find: {
-      byStructure: findStructure,
-      byStructureType: findStructureType,
-      withCache: {
-        storage: findStorage,
-        constructionSite: findConstructionSite
-      }
+      closestStructure: findStructure,
+      closestConstructionSite: findConstructionSite,
+      closestAny: findAny
     },
     goTo: goTo
   }

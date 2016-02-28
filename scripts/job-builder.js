@@ -4,10 +4,10 @@ module.exports = (function () {
 
   function work(creep) {
     if (canBuild(creep)) {
-      var construction = service.find.withCache.constructionSite(creep);
+      var construction = service.find.closestConstructionSite(creep)
       build(construction, creep);
     } else {
-      var storage = service.find.withCache.storage(creep);
+      var storage = service.find.closestStructure(creep, FIND_MY_STRUCTURES, STRUCTURE_STORAGE);
       takeResources(storage, creep);
     }
   }

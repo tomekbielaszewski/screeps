@@ -1,3 +1,5 @@
+var service = require('service');
+
 module.exports = (function () {
 
   function work(creep) {
