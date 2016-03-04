@@ -13,7 +13,7 @@ module.exports = (function () {
     {
       type: UnitType.REPAIRER,
       priority: 1,
-      need: 3
+      need: 5
     },
     {
       type: UnitType.BUILDER,

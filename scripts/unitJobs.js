@@ -6,6 +6,7 @@ var builder = require('job-builder');
 var repairer = require('job-repairer');
 var guardian = require('job-guardian');
 var carrier = require('job-carrier');
+var creepRoutines = require('creepRoutines');
 
 module.exports = (function () {
 
@@ -33,6 +34,8 @@ module.exports = (function () {
         upgrader.work(creep);
         break;
     }
+
+    creepRoutines(creep);
   }
 
   return {

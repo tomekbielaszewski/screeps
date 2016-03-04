@@ -9,7 +9,6 @@ module.exports = (function () {
     } else {
       var construction = findDamagedStructure(creep);
       if (construction) {
-        console.log("Repairing structure with "+((construction.hits / construction.hitsMax)*100).toFixed(0)+"%  of HP");
         repairStructure(creep, construction);
       } else {
         idle(creep);
@@ -42,6 +41,9 @@ module.exports = (function () {
 
   function repairStructure(creep, construction) {
     var repairResult = creep.repair(construction);
+    if (repairResult == OK) {
+      console.log("Repairing structure with "+((construction.hits / construction.hitsMax)*100).toFixed(0)+"%  of HP");
+    }
     if (repairResult == ERR_NOT_IN_RANGE) {
       service.goTo(construction.pos, creep);
     }

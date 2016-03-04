@@ -1,3 +1,5 @@
+var pathCache = require('pathCache');
+
 module.exports = (function () {
 
   function findConstructionSite(creep) {
@@ -55,36 +57,41 @@ module.exports = (function () {
   }
 
   function goTo(target, creep, doNotCheckIfStuck) {
-    var _canStuck = !doNotCheckIfStuck;
-    if (!target instanceof RoomPosition) {
-      throw 'Given target is not an instance of RoomPosition!'
+    if(!creep.spawning) {
+      var _canStuck = !doNotCheckIfStuck;
+      if (!target instanceof RoomPosition) {
+        throw 'Given target is not an instance of RoomPosition!'
+      }
+      var _stuck = _canStuck && stuck(creep)
+      if (!(isEqual(target, creep.memory.target)) || _stuck) {
+        var path = pathCache.get(creep.pos, target);
+        if(!path || _stuck) {
+          console.log(creep.name + ' pathfind..');
+          path = Room.serializePath(creep.pos.findPathTo(target));
+          pathCache.clean();
+          pathCache.add(creep.pos, target, path);
+        }
+        creep.memory.target = target;
+        creep.memory.path = path;
+      }
+      creep.moveByPath(creep.memory.path);
     }
-    if (!(isEqual(target, creep.memory.target)) || (_canStuck && stuck(creep))) {
-      console.log(creep.name + ' pathfind..');
-      creep.memory.target = target;
-      creep.memory.path = Room.serializePath(creep.pos.findPathTo(target));
-    }
-    creep.moveByPath(creep.memory.path);
   }
 
   function stuck(creep) {
-    if(!creep.spawning) {
-      var lastPos = _.clone(creep.memory.lastPos);
-      creep.memory.lastPos = creep.pos;
+    var lastPos = _.clone(creep.memory.lastPos);
+    creep.memory.lastPos = creep.pos;
 
-      if (isEqual(creep.pos, lastPos)) {
-        creep.memory.stuckTicks = creep.memory.stuckTicks + 1;
-        if (creep.memory.stuckTicks > 3) {
-          console.log(creep.name + ' stuck!');
-          return true;
-        } else {
-          return false;
-        }
+    if (isEqual(creep.pos, lastPos)) {
+      creep.memory.stuckTicks = creep.memory.stuckTicks + 1;
+      if (creep.memory.stuckTicks > 3) {
+        console.log(creep.name + ' stuck!');
+        return true;
+      } else {
+        return false;
       }
-      creep.memory.stuckTicks = 0;
-    } else {
-      return false;
     }
+    creep.memory.stuckTicks = 0;
   }
 
   function isEqual(o1, o2) {
