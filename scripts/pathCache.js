@@ -31,12 +31,13 @@ module.exports = (function () {
     if(Memory.pathCache && _.size(Memory.pathCache) > 1500) { //1500 entries ~= 100kB
       console.log('Cleaning path cache (usage == '+usage+')...');
       var counter = 0;
+      var freshCache = {};
       for (var key in Memory.pathCache) {
         var cached = Memory.pathCache[key];
-        if(cached && cached.uses === usage) {
-          Memory.pathCache[key] = undefined;
-          counter += 1;
+        if(cached && cached.uses > usage) {
+          freshCache[key] = cached;
         }
+        Memory.pathCache = freshCache;
       }
       Game.notify('Path cache of usage '+usage+' cleaned! '+counter+' paths removed', 6 * 60);
       cleanCacheByUsage(usage + 1);
