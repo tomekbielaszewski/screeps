@@ -33,7 +33,7 @@ module.exports = (function () {
       var counter = 0;
       for (var key in Memory.pathCache) {
         var cached = Memory.pathCache[key];
-        if(cached.uses === usage) {
+        if(cached && cached.uses === usage) {
           Memory.pathCache[key] = undefined;
           counter += 1;
         }
