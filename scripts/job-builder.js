@@ -3,12 +3,14 @@ var service = require('service');
 module.exports = (function () {
 
   function work(creep) {
-    if (canBuild(creep)) {
-      var construction = service.find.closestConstructionSite(creep);
+    var construction = service.find.closestConstructionSite(creep);
+    if (canBuild(creep) && construction) {
       build(construction, creep);
-    } else {
+    } else if(construction) {
       var storage = service.find.closestStructure(creep, FIND_MY_STRUCTURES, STRUCTURE_STORAGE);
       takeResources(storage, creep);
+    } else {
+      idle(creep);
     }
   }
 
@@ -33,6 +35,10 @@ module.exports = (function () {
     if (transferResult == ERR_NOT_IN_RANGE) {
       service.goTo(storage.pos, creep);
     }
+  }
+
+  function idle(creep) {
+    service.goTo(Game.flags.idle.pos, creep, true);
   }
 
   return {
