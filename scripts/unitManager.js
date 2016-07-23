@@ -33,7 +33,7 @@ module.exports = (function () {
     {
       type: UnitType.MINER,
       priority: 2,
-      need: 2
+      need: 3
     },
     {
       type: UnitType.HARVESTER,

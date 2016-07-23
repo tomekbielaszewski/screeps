@@ -70,6 +70,8 @@ module.exports = (function () {
           path = Room.serializePath(creep.pos.findPathTo(target));
           pathCache.clean();
           pathCache.add(creep.pos, target, path);
+        } else {
+          console.log(creep.name + ' uses cached path..');
         }
         creep.memory.target = target;
         creep.memory.path = path;

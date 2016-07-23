@@ -5,7 +5,7 @@ function cleanMemory() {
     var cleanMemory = {};
     for (var name in Memory.creeps) {
       var creep = Memory.creeps[name];
-      if(creep) {
+      if(Game.creeps[name]) {
         cleanMemory[name] = creep;
       }
     }

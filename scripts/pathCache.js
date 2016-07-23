@@ -32,14 +32,18 @@ module.exports = (function () {
       console.log('Cleaning path cache (usage == '+usage+')...');
       var counter = 0;
       var freshCache = {};
+
       for (var key in Memory.pathCache) {
         var cached = Memory.pathCache[key];
         if(cached && cached.uses > usage) {
           freshCache[key] = cached;
+          counter += 1;
         }
-        Memory.pathCache = freshCache;
       }
-      Game.notify('Path cache of usage '+usage+' cleaned! '+counter+' paths removed', 6 * 60);
+
+      Memory.pathCache = freshCache;
+
+      Game.notify(new Date().toString() + ': Path cache of usage '+usage+' cleaned! '+counter+' paths left', 6 * 60);
       cleanCacheByUsage(usage + 1);
     }
   }

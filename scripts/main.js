@@ -8,6 +8,8 @@ var gameRoutines = require('gameRoutines');
 //profiler.enable();
 module.exports.loop = function () {
   //profiler.wrap(function() {
+  PathFinder.use(true);
+
   for (var name in Game.creeps) {
     var creep = Game.creeps[name];
     job.work(creep);

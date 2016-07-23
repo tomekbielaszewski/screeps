@@ -9,7 +9,7 @@ module.exports = function(grunt) {
             options: {
                 email: config.email,
                 password: config.password,
-                branch: 'default'
+                branch: config.branch
             },
             dist: {
                 src: ['scripts/*.js']
