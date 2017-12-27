@@ -1,6 +1,6 @@
 //var profiler = require('profiler');
-require('./creep/jobs');
-require('./enums/all');
+import './creep'
+import './enums'
 
 module.exports.loop = function () {
     Game.creeps.forEach(c => {
