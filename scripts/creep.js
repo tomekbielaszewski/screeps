@@ -1,3 +1,3 @@
-import 'scripts/creep__carrier'
-import 'scripts/creep__small_worker'
-import 'scripts/creep__worker'
+require('./creep__carrier');
+require('./creep__small_worker');
+require('./creep__worker');
