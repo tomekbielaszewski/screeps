@@ -6,6 +6,6 @@ require('./enums');
 
 module.exports.loop = function () {
     _.forEach(Game.creeps, c => {
-        c[c.role]();
+        c[c.memory.role]();
     })
 };
