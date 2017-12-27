@@ -1,9 +1,11 @@
 //var profiler = require('profiler');
+let _ = require('lodash');
+
 require('./creep');
 require('./enums');
 
 module.exports.loop = function () {
-    Game.creeps.forEach(c => {
+    _.forEach(Game.creeps, c => {
         c[c.role]();
     })
 };
