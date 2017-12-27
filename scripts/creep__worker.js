@@ -1,3 +1,3 @@
-Creep.prototype.worker = function () {
+Creep.prototype[ROLE_WORKER] = function () {
     console.log("Worker working");
 };
