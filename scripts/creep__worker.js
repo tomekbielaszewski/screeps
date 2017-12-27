@@ -1,3 +1,3 @@
-Creep.prototype.worker = () => {
+Creep.prototype.worker = function () {
     console.log("Worker working");
 };
