@@ -16,7 +16,7 @@ Spawn.prototype.enqueue = function (creepRole, creepBody, priority) {
     }
 };
 
-Spawn.prototype.work = function () {
+Spawn.prototype.processQueue = function () {
     let queue = this.memory.queue;
     if (queue && queue.length > 0 && !this.spawning) {
         let newCreepDefinition = queue.pop();
@@ -28,11 +28,27 @@ Spawn.prototype.work = function () {
         let result = this.spawnCreep(body, name, memory);
 
         if(result !== OK) {
-            this.enqueue(newCreepDefinition.role, body, newCreepDefinition.priority);
-            logUnsuccessfulSpawn(result, this.log);
+            if(result === ERR_BUSY || result === ERR_NOT_ENOUGH_ENERGY) {
+                this.enqueue(newCreepDefinition.role, body, newCreepDefinition.priority);
+            }
+            this.logUnsuccessfulSpawn(result);
+            this.log(`${body}, ${name}, ${JSON.stringify(memory)}`)
         }
     }
 };
+
+Spawn.prototype.logUnsuccessfulSpawn = function (result) {
+    this.log('Spawning unsuccessful');
+    switch (result) {
+        case ERR_NOT_OWNER: this.log('ERR_NOT_OWNER'); break;
+        case ERR_NAME_EXISTS: this.log('ERR_NAME_EXISTS'); break;
+        case ERR_BUSY: this.log('ERR_BUSY'); break;
+        case ERR_NOT_ENOUGH_ENERGY: this.log('ERR_NOT_ENOUGH_ENERGY'); break;
+        case ERR_INVALID_ARGS: this.log('ERR_INVALID_ARGS'); break;
+        case ERR_RCL_NOT_ENOUGH: this.log('ERR_RCL_NOT_ENOUGH'); break;
+        default: this.log(`Unknown error code: ${result}`);
+    }
+}
 
 function createQueueElement(role, body, priority) {
     return {
@@ -46,17 +62,4 @@ function sortByPriority(queue) {
     return _.sortBy(queue, function (el) {
         return el.priority
     })
-}
-
-function logUnsuccessfulSpawn(result, log) {
-    log('Spawning unsuccessful');
-    switch (result) {
-        case ERR_NOT_OWNER: log('ERR_NOT_OWNER'); break;
-        case ERR_NAME_EXISTS: log('ERR_NAME_EXISTS'); break;
-        case ERR_BUSY: log('ERR_BUSY'); break;
-        case ERR_NOT_ENOUGH_ENERGY: log('ERR_NOT_ENOUGH_ENERGY'); break;
-        case ERR_INVALID_ARGS: log('ERR_INVALID_ARGS'); break;
-        case ERR_RCL_NOT_ENOUGH: log('ERR_RCL_NOT_ENOUGH'); break;
-        default: log(`Unknown error code: ${result}`);
-    }
 }
