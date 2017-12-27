@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var factory = require('unitFactory');
 
-module.exports = (function () { //TODO add priorities to queue - sometimes game stuck with one builder which uses all resources and no miners nor harvesters
+module.exports = (function () {
 
   function update() {
     if (getQueue().length > 0) {

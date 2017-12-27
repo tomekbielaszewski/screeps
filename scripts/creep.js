@@ -1,3 +1,4 @@
-require('./creep__carrier');
-require('./creep__small_worker');
-require('./creep__worker');
+require('./creep__job_carrier');
+require('./creep__job_mobile_worker');
+require('./creep__job_worker');
+require('./creep__job_upgrader');
