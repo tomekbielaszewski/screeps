@@ -1,0 +1,25 @@
+{
+  "name": "screeps",
+  "version": "1.0.0",
+  "description": "Screeps - MMO Game for JS coders",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt-screeps": "^1.2.0",
+    "grunt": "^0.4.5",
+    "jest": "^22.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomekbielaszewski/screeps.git"
+  },
+  "author": "tomekbielaszewski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomekbielaszewski/screeps/issues"
+  },
+  "homepage": "https://github.com/tomekbielaszewski/screeps#readme"
+}
