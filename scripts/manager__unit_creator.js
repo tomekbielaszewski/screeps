@@ -13,7 +13,7 @@ module.exports = function () {
         .map(s => {
             return {
                 spawn: s,
-                demand: calculateDemand(s.room)
+                demand: calculateDemand(s)
             }
         })
         .forEach(function (spawnDemand) {

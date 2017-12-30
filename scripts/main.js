@@ -4,6 +4,7 @@ const _ = require('lodash');
 require('./loggers');
 require('./enums');
 require('./roomPosition__finders');
+require('./room__finders');
 require('./creep');
 require('./spawn__unit_creation_queue');
 const unitManagerUpdate = require('./manager__unit_creator');
