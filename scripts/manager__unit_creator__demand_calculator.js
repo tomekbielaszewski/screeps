@@ -15,7 +15,7 @@ function calculateDemandForMobileWorkers(spawn) {
 function calculateDemandForCarriers(spawn) {
     let amountOfSources = spawn.room.findSources().length;
     let amountOfRoomControllers = 1;
-    return amountOfRoomControllers + amountOfSources;
+    return amountOfRoomControllers + amountOfSources - countCreeps(spawn.room, ROLE_CARRIER);
 }
 
 function calculateDemandForWorkers(spawn) {
