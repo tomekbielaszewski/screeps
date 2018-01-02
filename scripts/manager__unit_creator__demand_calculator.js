@@ -8,18 +8,25 @@ module.exports = function calculateDemand(spawn) {
 };
 
 function calculateDemandForMobileWorkers(spawn) {
-    let mobileWorkerCount = _(Game.creeps).filter(c => c.room.id === spawn.room.id).filter(c => c.memory.role === ROLE_MOBILE_WORKER).value().length;
+    let mobileWorkerCount = countCreeps(spawn.room, ROLE_MOBILE_WORKER);
     return Math.max(1 - mobileWorkerCount, 0);
 }
 
 function calculateDemandForCarriers(spawn) {
-    return 0;
+    let amountOfSources = spawn.room.findSources().length;
+    let amountOfRoomControllers = 1;
+    return amountOfRoomControllers + amountOfSources;
 }
 
 function calculateDemandForWorkers(spawn) {
-    return spawn.room.findSources().length - _(Game.creeps).filter(c => c.room.id === spawn.room.id).filter(c => c.memory.role === ROLE_WORKER).value().length;
+    return spawn.room.findSources().length - countCreeps(spawn.room, ROLE_WORKER);
 }
 
 function calculateDemandForUpgraders(spawn) {
-    return 0;
+    let upgradersCount = countCreeps(spawn.room, ROLE_UPGRADER);
+    return Math.max(1 - upgradersCount, 0);
+}
+
+function countCreeps(room, role) {
+    return _(Game.creeps).filter(c => c.room.id === room.id).filter(c => c.memory.role === role).value().length;
 }
