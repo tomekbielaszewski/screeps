@@ -60,6 +60,6 @@ function createQueueElement(role, body, priority) {
 
 function sortByPriority(queue) {
     return _.sortBy(queue, function (el) {
-        return el.priority
+        return -el.priority
     })
 }
