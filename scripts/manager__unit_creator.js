@@ -3,8 +3,8 @@ const calculateDemand = require('manager__unit_creator__demand_calculator');
 const calculateBodyParts = require('manager__unit_creator__body_part_calculator');
 const priority = {
     ROLE_MOBILE_WORKER: 1000,
+    ROLE_WORKER: 910,
     ROLE_CARRIER: 900,
-    ROLE_WORKER: 900,
     ROLE_UPGRADER: 800
 };
 
