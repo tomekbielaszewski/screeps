@@ -33,7 +33,7 @@ function repeat(what, howMany) {
 }
 
 module.exports = function (role, spawn) {
-    const energyAvailable = spawn.room.energyAvailable;
+    const energyAvailable = spawn.room.energyCapacityAvailable;
     let roleBodyPartsCalculators = {};
     roleBodyPartsCalculators[ROLE_MOBILE_WORKER] = calculateForMobileWorker;
     roleBodyPartsCalculators[ROLE_CARRIER] = calculateForCarrier;

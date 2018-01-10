@@ -1,30 +1,27 @@
 const _ = require('lodash');
-const calculateDemand = require('manager__unit_creator__demand_calculator');
+const demandCalculator = require('manager__unit_creator__demand_calculator');
 const calculateBodyParts = require('manager__unit_creator__body_part_calculator');
-const priority = {
-    ROLE_MOBILE_WORKER: 1000,
-    ROLE_WORKER: 910,
-    ROLE_CARRIER: 900,
-    ROLE_UPGRADER: 800
-};
+
+const rolePriorities = [
+    {role: ROLE_MOBILE_WORKER, priority: 1000},
+    {role: ROLE_WORKER, priority: 910},
+    {role: ROLE_CARRIER, priority: 900},
+    {role: ROLE_UPGRADER, priority: 800}
+];
 
 module.exports = function () {
-    _.values(Game.spawns)
-        .map(s => {
-            return {
-                spawn: s,
-                demand: calculateDemand(s)
+    _.forEach(Game.spawns, function (spawn) {
+        spawn.resetQueue();
+
+        for (let i = 0; i < rolePriorities.length; i++) {
+            let rolePriority = rolePriorities[i];
+            let role = rolePriority.role;
+            let priority = rolePriority.priority;
+            let demand = demandCalculator[role]();
+
+            if (demand > 0) {
+                spawn.enqueue(role, calculateBodyParts(role, spawn), demand, priority);
             }
-        })
-        .forEach(function (spawnDemand) {
-            const spawn = spawnDemand.spawn;
-            _.forIn(spawnDemand.demand, function (demand, role) {
-                if (demand) {
-                    let body = calculateBodyParts(role, spawn);
-                    if(body) {
-                        spawn.enqueue(role, calculateBodyParts(role, spawn), priority[role])
-                    }
-                }
-            });
-        })
+        }
+    });
 };

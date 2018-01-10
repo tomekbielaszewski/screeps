@@ -1,9 +1,9 @@
-module.exports = function calculateDemand(spawn) {
+module.exports = function demandCalculators() {
     let demand = {};
-    demand[ROLE_MOBILE_WORKER] = calculateDemandForMobileWorkers(spawn);
-    demand[ROLE_CARRIER] = calculateDemandForCarriers(spawn);
-    demand[ROLE_WORKER] = calculateDemandForWorkers(spawn);
-    demand[ROLE_UPGRADER] = calculateDemandForUpgraders(spawn);
+    demand[ROLE_MOBILE_WORKER] = calculateDemandForMobileWorkers;
+    demand[ROLE_CARRIER] = calculateDemandForCarriers;
+    demand[ROLE_WORKER] = calculateDemandForWorkers;
+    demand[ROLE_UPGRADER] = calculateDemandForUpgraders;
     return demand;
 };
 
