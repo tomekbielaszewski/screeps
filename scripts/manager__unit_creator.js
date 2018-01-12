@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const log = require('loggers');
 const demandCalculators = require('manager__unit_creator__demand_calculator')();
 const calculateBodyParts = require('manager__unit_creator__body_part_calculator');
 
@@ -10,7 +11,7 @@ const rolePriorities = [
 ];
 
 module.exports = function () {
-    console.log('Running manager: unit creator');
+    log('Manager[Unit creator]', 'started');
     _.forEach(Game.spawns, function (spawn) {
         spawn.resetQueue();
 

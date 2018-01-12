@@ -47,8 +47,8 @@ Spawn.prototype.processQueue = function () {
 };
 
 Spawn.prototype.resetQueue = function () {
+    this.log('Queue reset');
     this.memory.queue = [];
-    this.log('Resetting queue')
 };
 
 Spawn.prototype.spawn = function(role, body) {
