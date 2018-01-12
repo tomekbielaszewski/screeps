@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const demandCalculator = require('manager__unit_creator__demand_calculator');
+const demandCalculators = require('manager__unit_creator__demand_calculator')();
 const calculateBodyParts = require('manager__unit_creator__body_part_calculator');
 
 const rolePriorities = [
@@ -10,6 +10,7 @@ const rolePriorities = [
 ];
 
 module.exports = function () {
+    console.log('Running manager: unit creator');
     _.forEach(Game.spawns, function (spawn) {
         spawn.resetQueue();
 
@@ -17,7 +18,7 @@ module.exports = function () {
             let rolePriority = rolePriorities[i];
             let role = rolePriority.role;
             let priority = rolePriority.priority;
-            let demand = demandCalculator[role]();
+            let demand = demandCalculators[role](spawn);
 
             if (demand > 0) {
                 spawn.enqueue(role, calculateBodyParts(role, spawn), demand, priority);
