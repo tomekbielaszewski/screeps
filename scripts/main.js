@@ -7,10 +7,13 @@ require('./roomPosition__finders');
 require('./room__finders');
 require('./creep');
 require('./spawn__unit_creation_queue');
+
 const unitManagerUpdate = require('./manager__unit_creator');
 
 module.exports.loop = function () {
-    every(100).ticks.run(unitManagerUpdate);
+    Memory.events = Memory.events || [];
+
+    every(10).ticks.run(unitManagerUpdate);
 
     _.forEach(Game.creeps, creep => {
         let role = creep.memory.role;
@@ -25,11 +28,18 @@ module.exports.loop = function () {
 function every(ticks) {
     return {
         ticks: {
-            run: function(fn) {
-                if(Game.time % ticks === 0) {
+            run: function (fn) {
+                if (Game.time % ticks === 0) {
                     fn();
                 }
             }
         }
     };
 }
+
+//In game utils
+global.killAll = function () {
+    _.forEach(Game.creeps, function (c) {
+        c.suicide();
+    })
+};
