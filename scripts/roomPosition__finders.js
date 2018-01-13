@@ -1,10 +1,10 @@
 RoomPosition.prototype.findStorage = function() {
     return this.findClosestByRange(FIND_MY_STRUCTURES, {
-        filter: function (object) {
-            return object.structureType && (object.structureType === STRUCTURE_SPAWN ||
-                object.structureType === STRUCTURE_EXTENSION ||
-                object.structureType === STRUCTURE_STORAGE ||
-                object.structureType === STRUCTURE_CONTAINER);
+        filter: function (structure) {
+            return structure.structureType && (structure.structureType === STRUCTURE_SPAWN ||
+                structure.structureType === STRUCTURE_EXTENSION ||
+                structure.structureType === STRUCTURE_STORAGE ||
+                structure.structureType === STRUCTURE_CONTAINER);
         }
     })
 };
