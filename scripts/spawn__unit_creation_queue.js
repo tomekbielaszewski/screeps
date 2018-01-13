@@ -12,7 +12,7 @@ Spawn.prototype.enqueue = function (creepRole, creepBody, amount, priority) {
         queue.push(createQueueElement(creepRole, creepBody, amount, priority));
         queue = sortByPriority(queue);
         this.memory.queue = queue;
-        this.log(`${creepRole} added to queue. New queue length: ${queue.length}`);
+        this.log(`${amount}x ${creepRole} added to queue. New queue length: ${queue.length}`);
     } else {
         this.log(`${creepRole} is already added to queue`);
     }
