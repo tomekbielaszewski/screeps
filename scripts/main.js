@@ -13,7 +13,7 @@ const unitManagerUpdate = require('./manager__unit_creator');
 module.exports.loop = function () {
     Memory.events = Memory.events || [];
 
-    every(10).ticks.run(unitManagerUpdate);
+    every(500).ticks.run(unitManagerUpdate);
 
     _.forEach(Game.creeps, creep => {
         let role = creep.memory.role;
@@ -43,3 +43,4 @@ global.killAll = function () {
         c.suicide();
     })
 };
+global.unitManagerReset = unitManagerUpdate;
