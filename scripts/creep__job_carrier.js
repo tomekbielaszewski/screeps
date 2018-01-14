@@ -1,3 +1,5 @@
+const eventSystem = require('event_system');
+
 Creep.prototype[ROLE_CARRIER] = function () {
     let event = getCarryEvent.call(this);
     if(event) {
@@ -35,10 +37,7 @@ Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
 function getCarryEvent() {
     if (this.memory.event) return this.memory.event;
 
-    let carryEvent = _(Memory.events)
-        .filter(isCarryEvent)
-        .first();
-    Memory.events = _(Memory.events).remove(e => e === carryEvent);
+    let carryEvent = eventSystem.get(isCarryEvent);
     this.memory.event = carryEvent;
     return carryEvent;
 }
