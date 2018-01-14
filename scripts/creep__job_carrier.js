@@ -2,27 +2,21 @@ const eventSystem = require('event_system');
 
 Creep.prototype[ROLE_CARRIER] = function () {
     let event = getCarryEvent.call(this);
-    if(event) {
+    if (event) {
         this[event.type](event);
     }
-
-    // if (this.isCapacityFull()) {
-    //     let storage = this.pos.findStorage();
-    //     transfer.call(this, storage, RESOURCE_ENERGY);
-    // } else {
-    //     let resource = this.pos.findDroppedResource();
-    //     if (resource) {
-    //         pickup.call(this, resource);
-    //     }
-    // }
 }
 ;
 
 Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
     if (this.isCapacityFull()) {
         let target = new RoomPosition(event.target.x, event.target.y, event.target.roomName);
-        let success = dropOn.call(this, target, RESOURCE_ENERGY);
-        if (success) finishEvent.call(this);
+        let result = dropOn.call(this, target, RESOURCE_ENERGY);
+        if (result === OK) {
+            finishEvent.call(this);
+            return;
+        }
+        this.log(`Event ${event.type} did not finish. Result of last operation was: ${result}`);
     } else {
         let resource = this.pos.findDroppedResource();
         if (resource) {
@@ -43,24 +37,22 @@ function getCarryEvent() {
 }
 
 function isCarryEvent(event) {
-    return event.type === EVENT__TRANSPORT_RESOURCES ||
-        event.type() === EVENT__BRING_RESOURCES
+    return event.type === EVENT__TRANSPORT_RESOURCES;
 }
 
 function pickup(resource) {
     if (this.pos.isNearTo(resource.pos)) {
-        this.pickup(resource);
-        return true;
+        let result = this.pickup(resource);
+        return result === OK;
     } else {
         this.moveTo(resource.pos);
     }
 }
 
 function dropOn(pos, resourceType) {
-    if (this.pos.isNearTo(pos)) {
-        let success = this.drop(resourceType);
-        if(success) this.memory.doNotPickup = pos;
-        return success;
+    if (this.pos === pos) {
+        let result = this.drop(resourceType);
+        return result === OK;
     } else {
         this.moveTo(pos);
     }
@@ -68,8 +60,8 @@ function dropOn(pos, resourceType) {
 
 function withdraw(storage, resourceType) {
     if (this.pos.isNearTo(storage.pos)) {
-        this.withdraw(storage, resourceType);
-        return true;
+        let result = this.withdraw(storage, resourceType);
+        return result === OK;
     } else {
         this.moveTo(storage.pos);
     }
@@ -77,7 +69,8 @@ function withdraw(storage, resourceType) {
 
 function transfer(storage, resourceType) {
     if (this.pos.isNearTo(storage.pos)) {
-        this.transfer(storage, resourceType);
+        let result = this.transfer(storage, resourceType);
+        return result === OK;
     } else {
         this.moveTo(storage.pos);
     }
