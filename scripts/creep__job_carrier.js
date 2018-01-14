@@ -42,8 +42,7 @@ function isCarryEvent(event) {
 
 function pickup(resource) {
     if (this.pos.isNearTo(resource.pos)) {
-        let result = this.pickup(resource);
-        return result === OK;
+        return this.pickup(resource);
     } else {
         this.moveTo(resource.pos);
     }
@@ -51,8 +50,7 @@ function pickup(resource) {
 
 function dropOn(pos, resourceType) {
     if (this.pos === pos) {
-        let result = this.drop(resourceType);
-        return result === OK;
+        return this.drop(resourceType);
     } else {
         this.moveTo(pos);
     }
@@ -60,8 +58,7 @@ function dropOn(pos, resourceType) {
 
 function withdraw(storage, resourceType) {
     if (this.pos.isNearTo(storage.pos)) {
-        let result = this.withdraw(storage, resourceType);
-        return result === OK;
+        return this.withdraw(storage, resourceType);
     } else {
         this.moveTo(storage.pos);
     }
@@ -69,8 +66,7 @@ function withdraw(storage, resourceType) {
 
 function transfer(storage, resourceType) {
     if (this.pos.isNearTo(storage.pos)) {
-        let result = this.transfer(storage, resourceType);
-        return result === OK;
+        return this.transfer(storage, resourceType);
     } else {
         this.moveTo(storage.pos);
     }
