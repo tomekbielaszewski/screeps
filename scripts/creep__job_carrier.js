@@ -16,7 +16,7 @@ Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
             finishEvent.call(this);
             return;
         }
-        if(result) this.log(`Event ${event.type} did not finish. Result of last operation was: ${result}`);
+        if(result) this.log(`Event ${event.type} did not finish properly. Result of last operation was: ${result}`);
     } else {
         let resource = this.pos.findDroppedResource();
         if (resource) {
