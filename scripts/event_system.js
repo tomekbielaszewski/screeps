@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const log = require('loggers');
+const log = require('./loggers');
 
 function EventSystem() {
     Memory.events = Memory.events || [];

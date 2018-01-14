@@ -1,4 +1,4 @@
-require('cache__core');
+require('./cache__core');
 
 Creep.prototype.cachedMoveTo = function (pos, moveToExactPosition) {
     if(!pos) return;

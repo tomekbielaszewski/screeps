@@ -1,4 +1,4 @@
-const eventSystem = require('event_system');
+const eventSystem = require('./event_system');
 
 Creep.prototype[ROLE_CARRIER] = function () {
     let event = getCarryEvent.call(this);

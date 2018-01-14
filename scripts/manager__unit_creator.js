@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const log = require('loggers');
-const demandCalculators = require('manager__unit_creator__demand_calculator')();
-const calculateBodyParts = require('manager__unit_creator__body_part_calculator');
+const log = require('./loggers');
+const demandCalculators = require('./manager__unit_creator__demand_calculator')();
+const calculateBodyParts = require('./manager__unit_creator__body_part_calculator');
 
 const rolePriorities = [
     {role: ROLE_MOBILE_WORKER, priority: 1000},

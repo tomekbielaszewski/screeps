@@ -1,4 +1,4 @@
-const eventSystem = require('event_system');
+const eventSystem = require('./event_system');
 
 Creep.prototype[ROLE_UPGRADER] = function () {
     let controller = this.room.controller;

@@ -1,5 +1,4 @@
-global.Memory = {};
-
+require('./screeps_api_mock');
 const eventSystem = require('../scripts/event_system');
 
 test('Publishing adds event to Memory', () => {
