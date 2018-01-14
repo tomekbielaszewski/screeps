@@ -1,5 +1,20 @@
 const eventSystem = require('./event_system');
 
+/*
+* State machine:
+*
+* 0. Spawn
+* 1. Collect energy from spawn
+* 2. Go to pos 3 squares from RoomController
+* 3. Create Construction site of ContainerStructure 2 sq from RC
+* 4. Hire* carrier to bring energy to you (transfer directly to upgrader creep)
+* 5. Use energy you carry to build Container
+* 6. When Container is ready hire carrier to bring energy to it
+* 7. Take energy from container to upgrade RC
+*
+* *Hire: create an event for transporting given amount of resources
+* */
+
 Creep.prototype[ROLE_UPGRADER] = function () {
     let controller = this.room.controller;
 
