@@ -8,7 +8,9 @@
     "grunt": "^0.4.5",
     "jest": "^22.0.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "lodash": "^3.10.1"
+  },
   "scripts": {
     "test": "jest"
   },
