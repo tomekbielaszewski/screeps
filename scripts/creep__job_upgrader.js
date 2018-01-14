@@ -1,3 +1,5 @@
+const eventSystem = require('event_system');
+
 Creep.prototype[ROLE_UPGRADER] = function () {
     let controller = this.room.controller;
 
@@ -18,7 +20,7 @@ function upgrade(controller) {
             this.memory.eventSent = false;
         } else {
             if(!this.memory.eventSent) {
-                Memory.events.push({
+                eventSystem.publish({
                     type: EVENT__TRANSPORT_RESOURCES,
                     target: this.pos
                 });
