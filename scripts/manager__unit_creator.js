@@ -5,8 +5,8 @@ const calculateBodyParts = require('./manager__unit_creator__body_part_calculato
 
 const rolePriorities = [
     {role: ROLE_MOBILE_WORKER, priority: 1000},
-    {role: ROLE_WORKER, priority: 910},
     {role: ROLE_CARRIER, priority: 900},
+    {role: ROLE_WORKER, priority: 900},
     {role: ROLE_UPGRADER, priority: 800}
 ];
 
