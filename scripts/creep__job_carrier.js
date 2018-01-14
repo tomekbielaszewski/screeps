@@ -1,33 +1,25 @@
-function transfer(storage, resourcetype) {
-    if (this.pos.isNearTo(storage.pos)) {
-        this.transfer(storage, resourcetype);
-    } else {
-        this.moveTo(storage.pos);
-    }
-}
-
 Creep.prototype[ROLE_CARRIER] = function () {
-    // let event = getCarryEvent();
-    // if(event) {
-    //     this[event.type](event);
-    // }
-
-    if (this.isCapacityFull()) {
-        let storage = this.pos.findStorage();
-        transfer.call(this, storage, RESOURCE_ENERGY);
-    } else {
-        let resource = this.pos.findDroppedResource();
-        if (resource) {
-            pickup.call(this, resource);
-        }
+    let event = getCarryEvent.call(this);
+    if(event) {
+        this[event.type](event);
     }
+
+    // if (this.isCapacityFull()) {
+    //     let storage = this.pos.findStorage();
+    //     transfer.call(this, storage, RESOURCE_ENERGY);
+    // } else {
+    //     let resource = this.pos.findDroppedResource();
+    //     if (resource) {
+    //         pickup.call(this, resource);
+    //     }
+    // }
 }
 ;
 
 Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
     if (this.isCapacityFull()) {
-        let target = event.target;
-        let success = dropOn.call(this, target);
+        let target = new RoomPosition(event.target.x, event.target.y, event.target.roomName);
+        let success = dropOn.call(this, target, RESOURCE_ENERGY);
         if (success) finishEvent.call(this);
     } else {
         let resource = this.pos.findDroppedResource();
@@ -46,7 +38,7 @@ function getCarryEvent() {
     let carryEvent = _(Memory.events)
         .filter(isCarryEvent)
         .first();
-    _(Memory.events).remove(e => e === carryEvent);
+    Memory.events = _(Memory.events).remove(e => e === carryEvent);
     this.memory.event = carryEvent;
     return carryEvent;
 }
@@ -67,8 +59,9 @@ function pickup(resource) {
 
 function dropOn(pos, resourceType) {
     if (this.pos.isNearTo(pos)) {
-        this.drop(resourceType);
-        return true;
+        let success = this.drop(resourceType);
+        if(success) this.memory.doNotPickup = pos;
+        return success;
     } else {
         this.moveTo(pos);
     }
@@ -83,6 +76,15 @@ function withdraw(storage, resourceType) {
     }
 }
 
+function transfer(storage, resourceType) {
+    if (this.pos.isNearTo(storage.pos)) {
+        this.transfer(storage, resourceType);
+    } else {
+        this.moveTo(storage.pos);
+    }
+}
+
 function finishEvent() {
+    this.log('Event finished');
     this.memory.event = undefined;
 }
