@@ -14,9 +14,11 @@ EventSystem.prototype = {
         let event = _(Memory.events)
             .filter(filter)
             .first();
-        _.remove(Memory.events, e => e === event);
-        this.log(`Event ${event.type} removed. Event bus size: ${Memory.events.length}`);
-        return event;
+        if(event) {
+            _.remove(Memory.events, e => e === event);
+            this.log(`Event ${event.type} removed. Event bus size: ${Memory.events.length}`);
+            return event;
+        }
     },
     log: function (message) {
         log('EventSystem', message);
