@@ -29,7 +29,7 @@ function upgrade(controller) {
     if(this.isCarrying(RESOURCE_ENERGY)) {
         this.upgradeController(controller);
     } else {
-        let resource = this.pos.findDroppedResource();
+        let resource = this.pos.findDroppedEnergy();
         if (this.pos.isNearTo(resource.pos)) {
             this.pickup(resource);
             this.memory.eventSent = false;

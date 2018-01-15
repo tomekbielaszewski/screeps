@@ -13,6 +13,6 @@ RoomPosition.prototype.findSource = function() {
     return this.findClosestByRange(FIND_SOURCES_ACTIVE);
 };
 
-RoomPosition.prototype.findDroppedResource = function() {
-    return this.findClosestByRange(FIND_DROPPED_RESOURCES);
+RoomPosition.prototype.findDroppedEnergy = function() {
+    return this.findClosestByRange(FIND_DROPPED_ENERGY);
 };
