@@ -16,8 +16,7 @@ module.exports.loop = function () {
     every(500).ticks.run(unitManagerUpdate);
 
     _.forEach(Game.creeps, creep => {
-        let role = creep.memory.role;
-        creep[role]();
+        creep.work();
     });
 
     _.forEach(Game.spawns, spawn => {

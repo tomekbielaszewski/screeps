@@ -1,9 +1,15 @@
 const eventSystem = require('./event_system');
 
-Creep.prototype[ROLE_CARRIER] = function () {
-    let event = getCarryEvent.call(this);
-    if (event) {
-        this[event.type](event);
+Creep.prototype[ROLE_CARRIER] = {
+    onSpawn: function () {
+    },
+    onDie: function () {
+    },
+    work: function () {
+        let event = getCarryEvent.call(this);
+        if (event) {
+            this[event.type](event);
+        }
     }
 };
 

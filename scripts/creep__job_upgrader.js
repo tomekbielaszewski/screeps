@@ -15,18 +15,24 @@ const eventSystem = require('./event_system');
 * *Hire: create an event for transporting given amount of resources
 * */
 
-Creep.prototype[ROLE_UPGRADER] = function () {
-    let controller = this.room.controller;
+Creep.prototype[ROLE_UPGRADER] = {
+    onSpawn: function () {
+    },
+    onDie: function () {
+    },
+    work: function () {
+        let controller = this.room.controller;
 
-    if(this.pos.isNearTo(controller)) {
-        upgrade.call(this, controller);
-    } else {
-        this.moveTo(controller.pos);
+        if (this.pos.isNearTo(controller)) {
+            upgrade.call(this, controller);
+        } else {
+            this.moveTo(controller.pos);
+        }
     }
 };
 
 function upgrade(controller) {
-    if(this.isCarrying(RESOURCE_ENERGY)) {
+    if (this.isCarrying(RESOURCE_ENERGY)) {
         this.upgradeController(controller);
     } else {
         let resource = this.pos.findDroppedEnergy();
@@ -34,7 +40,7 @@ function upgrade(controller) {
             this.pickup(resource);
             this.memory.eventSent = false;
         } else {
-            if(!this.memory.eventSent) {
+            if (!this.memory.eventSent) {
                 eventSystem.publish({
                     type: EVENT__TRANSPORT_RESOURCES,
                     target: this.pos
