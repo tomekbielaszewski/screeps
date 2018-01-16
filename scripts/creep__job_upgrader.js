@@ -15,21 +15,68 @@ const eventSystem = require('./event_system');
 * *Hire: create an event for transporting given amount of resources
 * */
 
+const states = [
+    collectFirstEnergyPacket,
+    createContainerConstructionSite,
+    hireCreepToBringEnergyForContainerBuilding,
+    buildContainer,
+    hireCreepToBringEnergyForUpgradingRoomController,
+    upgradeRoomController
+];
+
 Creep.prototype[ROLE_UPGRADER] = {
     onSpawn: function () {
+        this.memory.state = 0;
     },
     onDie: function () {
     },
     work: function () {
-        let controller = this.room.controller;
+        states[this.memory.state].call(this);
 
-        if (this.pos.isNearTo(controller)) {
-            upgrade.call(this, controller);
-        } else {
-            this.moveTo(controller.pos);
-        }
+        // let controller = this.room.controller;
+        //
+        // if (this.pos.isNearTo(controller)) {
+        //     upgrade.call(this, controller);
+        // } else {
+        //     this.moveTo(controller.pos);
+        // }
     }
 };
+
+function collectFirstEnergyPacket() {
+    const storage = this.pos.findStorage();
+    if (this.pos.isNearTo(storage.pos)) {
+        const result = this.withdraw(storage, RESOURCE_ENERGY);
+        if(result === OK) {
+            this.log('Sources withdrawn. Advancing from state 0 to state 1');
+            this.memory.state = 1;
+            return;
+        }
+        this.log(`Could not withdraw resources, result was: ${result}`);
+    } else {
+        this.moveTo(storage.pos);
+    }
+}
+
+function createContainerConstructionSite() {
+
+}
+
+function hireCreepToBringEnergyForContainerBuilding() {
+
+}
+
+function buildContainer() {
+
+}
+
+function hireCreepToBringEnergyForUpgradingRoomController() {
+
+}
+
+function upgradeRoomController() {
+
+}
 
 function upgrade(controller) {
     if (this.isCarrying(RESOURCE_ENERGY)) {
