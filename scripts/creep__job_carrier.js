@@ -4,6 +4,9 @@ Creep.prototype[ROLE_CARRIER] = {
     onSpawn: function () {
     },
     onDie: function () {
+        if(this.memory.event) {
+            eventSystem.publish(this.memory.event);
+        }
     },
     work: function () {
         let event = getCarryEvent.call(this);
