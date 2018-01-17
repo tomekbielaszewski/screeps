@@ -42,4 +42,4 @@ global.killAll = function () {
         c.suicide();
     })
 };
-global.unitManagerReset = unitManagerUpdate;
+global.resetUnitManager = unitManagerUpdate;

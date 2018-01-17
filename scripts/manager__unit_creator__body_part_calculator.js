@@ -21,7 +21,9 @@ function calculateForWorker(availableEnergy) {
 }
 
 function calculateForUpgrader(availableEnergy) {
-    return calculateForWorker(availableEnergy).push(CARRY);
+    const upgraderBody = calculateForWorker(availableEnergy);
+    upgraderBody.push(CARRY);
+    return upgraderBody;
 }
 
 function repeat(what, howMany) {
