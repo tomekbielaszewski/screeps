@@ -21,7 +21,7 @@ function calculateForWorker(availableEnergy) {
 }
 
 function calculateForUpgrader(availableEnergy) {
-    return calculateForWorker(availableEnergy)
+    return calculateForWorker(availableEnergy).push(CARRY);
 }
 
 function repeat(what, howMany) {
