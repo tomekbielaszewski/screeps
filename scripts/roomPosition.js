@@ -1,3 +1,5 @@
+require('./roomPosition__finders');
+
 const nonBuildableTypes = [
     LOOK_SOURCES,
     LOOK_MINERALS,
