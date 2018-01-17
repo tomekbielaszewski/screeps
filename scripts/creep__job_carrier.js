@@ -18,7 +18,7 @@ Creep.prototype[ROLE_CARRIER] = {
 
 Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
     if (this.isCapacityFull()) {
-        let target = new RoomPosition(event.target.x, event.target.y, event.target.roomName);
+        let target = Game.deserializeRoomPosition(event.target);
         let result = dropOrMoveTo.call(this, target, RESOURCE_ENERGY);
         if (result === OK) {
             finishEvent.call(this);
