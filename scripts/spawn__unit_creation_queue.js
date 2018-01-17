@@ -63,7 +63,7 @@ Spawn.prototype.spawn = function(role, body) {
 
         if(isSevere(result)) {
             Game.notify(`One of errors [ERR_NOT_OWNER, ERR_NAME_EXISTS, ERR_INVALID_ARGS, ERR_RCL_NOT_ENOUGH] occurred 
-            when spawning creep in spawn[${spawn.name}], check logs from Game.time = ${Game.time}`, 60);
+            when spawning creep in spawn[${this.name}], check logs from Game.time = ${Game.time}`, 60);
         }
         return {
             success: false,
