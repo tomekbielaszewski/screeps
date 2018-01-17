@@ -47,7 +47,7 @@ function collectFirstEnergyPacket() {
     const storage = this.pos.findStorage();
     if (this.pos.isNearTo(storage.pos)) {
         const result = this.withdraw(storage, RESOURCE_ENERGY);
-        if(result === OK) {
+        if (result === OK) {
             this.log('Sources withdrawn. Advancing from state 0 to state 1');
             this.memory.state = 1;
             return;
@@ -59,7 +59,29 @@ function collectFirstEnergyPacket() {
 }
 
 function createContainerConstructionSite() {
+    const pos = this.room.controller.pos;
 
+    const buildablePositions = _([
+        this.room.getPositionAt(pos.x - 2, pos.y - 2),
+        this.room.getPositionAt(pos.x - 2, pos.y + 2),
+        this.room.getPositionAt(pos.x + 2, pos.y - 2),
+        this.room.getPositionAt(pos.x + 2, pos.y + 2)
+    ])
+        .filter(pos => pos.isBuildable())
+        .sort(pos => pos.getRangeTo(this.pos))
+        .value();
+
+    if (buildablePositions && buildablePositions.length) {
+        const closestBuildablePos = buildablePositions[0];
+        const result = closestBuildablePos.createConstructionSite(STRUCTURE_CONTAINER);
+
+        if (result === OK) {
+            this.log(`Container construction site placed. Advancing from state 1 to 2`)
+            this.memory.state = 2;
+            return;
+        }
+        this.log(`Could not create Container construction site. Result was: ${result}`);
+    }
 }
 
 function hireCreepToBringEnergyForContainerBuilding() {
