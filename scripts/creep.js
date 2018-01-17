@@ -10,12 +10,12 @@ Creep.prototype.work = function () {
 
     if (this.spawning && !this.memory.spawned) {
         this.memory.spawned = true;
-        this[role].onSpawn();
+        this[role].onSpawn.call(this);
     } else if (this.ticksToLive === 1) {
-        this[role].onDie();
+        this[role].onDie.call(this);
         Memory.creeps[creep.name] = undefined;
     } else {
-        this[role].work();
+        this[role].work.call(this);
     }
 };
 
