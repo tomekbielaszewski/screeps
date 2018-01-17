@@ -58,6 +58,10 @@ function collectFirstEnergyPacket() {
     }
 }
 
+//TODO wiecej testowania w roznych pokojach kiedy mamy dostepne kilka potencjalnych miejsc budowy
+//TODO state sie nie zmieni jak construction site juz tam jest
+//TODO sprawdzić czy juz tam jest construction site
+//TODO sprawdzic czy juz tam jest Container
 function createContainerConstructionSite() {
     const pos = this.room.controller.pos;
 
