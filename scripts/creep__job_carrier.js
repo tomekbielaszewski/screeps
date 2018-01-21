@@ -37,7 +37,7 @@ Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
 };
 
 Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
-    if (this.isCapacityFull()) {
+    if (this.isCarryingSomething()) {
         let target = Game.getObjectById(event.target);
         if (!target) {
             this.log(`Event(EVENT__HIRE_TO_TRANSPORTING_ENERGY) Cannot find target. Finishing event`);
