@@ -146,7 +146,13 @@ function potentialBuildablePositions(pos) {
 }
 
 function hireCreepToBringEnergyForContainerBuilding() {
-
+    eventSystem.publish({
+        type: EVENT__HIRE_TO_TRANSPORTING_ENERGY,
+        target: this.id,
+        amount: 5000
+    });
+    this.log(`Carrier hired. Advancing from state 2 to 3`);
+    this.memory.state = 3;
 }
 
 function buildContainer() {
