@@ -39,19 +39,24 @@ Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
 Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
     if (this.isCapacityFull()) {
         let target = Game.getObjectById(event.target);
+        if (!target) {
+            this.log(`Event(EVENT__HIRE_TO_TRANSPORTING_ENERGY) Cannot find target. Finishing event`);
+            finishEvent.call(this);
+            return;
+        }
         let carriedEnergy = this.carry[RESOURCE_ENERGY];
         let targetAvailableCapacity = getAvailableCapacity.call(this, target);
         let result = transferOrMoveTo.call(this, target, RESOURCE_ENERGY);
         if (result === OK) {
             event.amountTransferred = event.amountTransferred || 0;
-            event.amountTransferred += carriedEnergy;
+            event.amountTransferred += Math.min(carriedEnergy, targetAvailableCapacity);
             if (event.amountTransferred >= event.amount) {
                 finishEvent.call(this);
             }
             this.log(`Transferred ${event.amountTransferred}/${event.amount} of energy`);
             return;
         }
-        if (result) this.log(`Event ${event.type} did not finish properly. Result of last operation was: ${result}`);
+        if (isSevere(result)) this.log(`Event ${event.type} did not finish properly. Result of last operation was: ${result}`);
     } else {
         let resource = this.pos.findDroppedEnergy();
         if (resource) {
@@ -64,16 +69,11 @@ Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
 };
 
 function getAvailableCapacity(target) {
-    const type = typeof target;
-    if (type === Creep) {
+    if (target.carryCapacity) {
         return target.carryCapacity - _.sum(target.carry);
-    } else if (type === StructureStorage ||
-        type === StructureContainer ||
-        type === StructureTerminal) {
+    } else if (target.storeCapacity) {
         return target.storeCapacity - _.sum(target.store);
-    } else if (type === StructureExtension ||
-        type === StructureSpawn ||
-        type === StructureTower) {
+    } else if (target.energyCapacity) {
         return target.energyCapacity = target.energy;
     }
 }
@@ -126,4 +126,13 @@ function transferOrMoveTo(storage, resourceType) {
 function finishEvent() {
     this.log('Event finished');
     this.memory.event = undefined;
+}
+
+function isSevere(result) {
+    return result === ERR_NOT_OWNER ||
+        result === ERR_BUSY ||
+        result === ERR_NOT_ENOUGH_RESOURCES	 ||
+        result === ERR_INVALID_TARGET ||
+        result === ERR_NOT_IN_RANGE ||
+        result === ERR_INVALID_ARGS;
 }
