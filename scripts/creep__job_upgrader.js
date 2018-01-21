@@ -18,7 +18,7 @@ const eventSystem = require('./event_system');
 const states = [
     collectFirstEnergyPacket,
     createContainerConstructionSite,
-    hireCreepToBringEnergyForContainerBuilding,
+    hireCreepsToBringEnergyForContainerBuilding,
     buildContainer,
     hireCreepToBringEnergyForUpgradingRoomController,
     upgradeRoomController
@@ -145,18 +145,52 @@ function potentialBuildablePositions(pos) {
     ];
 }
 
-function hireCreepToBringEnergyForContainerBuilding() {
+function hireCreepsToBringEnergyForContainerBuilding() {
     eventSystem.publish({
         type: EVENT__HIRE_TO_TRANSPORTING_ENERGY,
         target: this.id,
-        amount: 5000
+        amount: 2500
     });
-    this.log(`Carrier hired. Advancing from state 2 to 3`);
+    eventSystem.publish({
+        type: EVENT__HIRE_TO_TRANSPORTING_ENERGY,
+        target: this.id,
+        amount: 2500
+    });
+    this.log(`2x Carrier hired. Advancing from state 2 to 3`);
     this.memory.state = 3;
 }
 
 function buildContainer() {
+    const constructionSite = getContainerConstructionSiteForUpgrader.call(this);
 
+    if(constructionSite) {
+        if (this.isCarryingSomething()) {
+            buildOrMoveTo.call(this, constructionSite);
+        }
+    } else {
+        if(getContainerForUpgrader()) {
+            this.memory.state = 4;
+            this.log(`Container built. Advancing from state 3 to 4`);
+        } else {
+            this.log('Somethings fucky! There is no construction site nor container and upgraded is in state 3');
+        }
+    }
+}
+
+function buildOrMoveTo(constructionSite) {
+    if (this.pos.isNearTo(constructionSite.pos)) {
+        return this.build(constructionSite);
+    } else {
+        this.moveTo(constructionSite.pos);
+    }
+}
+
+function withdrawOrMoveTo(storage, resourceType) {
+    if (this.pos.isNearTo(storage.pos)) {
+        return this.withdraw(storage, resourceType);
+    } else {
+        this.moveTo(storage.pos);
+    }
 }
 
 function hireCreepToBringEnergyForUpgradingRoomController() {
