@@ -4,7 +4,7 @@ Creep.prototype[ROLE_CARRIER] = {
     onSpawn: function () {
     },
     onDie: function () {
-        if(this.memory.event) {
+        if (this.memory.event) {
             eventSystem.publish(this.memory.event);
         }
     },
@@ -40,9 +40,10 @@ Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
     if (this.isCapacityFull()) {
         let target = Game.getObjectById(event.target);
         let carriedEnergy = this.carry[RESOURCE_ENERGY];
+        let targetAvailableCapacity = getAvailableCapacity.call(this, target);
         let result = transferOrMoveTo.call(this, target, RESOURCE_ENERGY);
         if (result === OK) {
-            event.amountTransferred = event.amountTransferred || event.amount;
+            event.amountTransferred = event.amountTransferred || 0;
             event.amountTransferred += carriedEnergy;
             if (event.amountTransferred >= event.amount) {
                 finishEvent.call(this);
@@ -62,6 +63,21 @@ Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
     }
 };
 
+function getAvailableCapacity(target) {
+    const type = typeof target;
+    if (type === Creep) {
+        return target.carryCapacity - _.sum(target.carry);
+    } else if (type === StructureStorage ||
+        type === StructureContainer ||
+        type === StructureTerminal) {
+        return target.storeCapacity - _.sum(target.store);
+    } else if (type === StructureExtension ||
+        type === StructureSpawn ||
+        type === StructureTower) {
+        return target.energyCapacity = target.energy;
+    }
+}
+
 function getCarryEvent() {
     if (this.memory.event) return this.memory.event;
 
@@ -71,7 +87,8 @@ function getCarryEvent() {
 }
 
 function isCarryEvent(event) {
-    return event.type === EVENT__TRANSPORT_RESOURCES;
+    return event.type === EVENT__TRANSPORT_RESOURCES ||
+        event.type === EVENT__HIRE_TO_TRANSPORTING_ENERGY;
 }
 
 function pickupOrMoveTo(resource) {
