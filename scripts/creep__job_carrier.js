@@ -36,6 +36,7 @@ Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
     }
 };
 
+//TODO dodaj pauzę na wyciaganie surowców ze spawnu/extensionów kiedy w kolejce budowania jest wysoko priorytetowa jednostak (mobileworker/warrior etc)
 Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
     if (this.isCarryingSomething()) {
         let target = Game.getObjectById(event.target);

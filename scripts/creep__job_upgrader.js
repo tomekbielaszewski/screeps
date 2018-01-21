@@ -177,6 +177,8 @@ function buildContainer() {
     }
 }
 
+
+//TODO przenies do creep.js
 function buildOrMoveTo(constructionSite) {
     if (this.pos.isNearTo(constructionSite.pos)) {
         return this.build(constructionSite);
