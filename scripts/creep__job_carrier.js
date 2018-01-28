@@ -96,12 +96,3 @@ function finishEvent() {
     this.log('Event finished');
     this.memory.event = undefined;
 }
-
-function isSevere(result) {
-    return result === ERR_NOT_OWNER ||
-        result === ERR_BUSY ||
-        result === ERR_NOT_ENOUGH_RESOURCES	 ||
-        result === ERR_INVALID_TARGET ||
-        result === ERR_NOT_IN_RANGE ||
-        result === ERR_INVALID_ARGS;
-}

@@ -81,13 +81,6 @@ function sortByPriority(queue) {
     })
 }
 
-function isSevere(spawnResult) {
-       return spawnResult === ERR_NOT_OWNER ||
-        spawnResult === ERR_NAME_EXISTS ||
-        spawnResult === ERR_INVALID_ARGS ||
-        spawnResult === ERR_RCL_NOT_ENOUGH;
-}
-
 function createQueueElement(role, body, amount, priority) {
     return {
         role: role,
