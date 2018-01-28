@@ -19,7 +19,7 @@ Creep.prototype[ROLE_CARRIER] = {
 Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
     if (this.isCapacityFull()) {
         let target = Game.deserializeRoomPosition(event.target);
-        let result = dropOrMoveTo.call(this, target, RESOURCE_ENERGY);
+        let result = this.dropOrMoveTo(target, RESOURCE_ENERGY);
         if (result === OK) {
             finishEvent.call(this);
             return;
@@ -28,10 +28,10 @@ Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
     } else {
         let resource = this.pos.findDroppedEnergy();
         if (resource) {
-            pickupOrMoveTo.call(this, resource);
+            this.pickupOrMoveTo(resource);
         } else {
             let storage = this.pos.findStorage();
-            withdrawOrMoveTo.call(this, storage, RESOURCE_ENERGY);
+            this.withdrawOrMoveTo(storage, RESOURCE_ENERGY);
         }
     }
 };
@@ -47,7 +47,7 @@ Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
         }
         let carriedEnergy = this.carry[RESOURCE_ENERGY];
         let targetAvailableCapacity = getAvailableCapacity.call(this, target);
-        let result = transferOrMoveTo.call(this, target, RESOURCE_ENERGY);
+        let result = this.transferOrMoveTo(target, RESOURCE_ENERGY);
         if (result === OK) {
             event.amountTransferred = event.amountTransferred || 0;
             event.amountTransferred += Math.min(carriedEnergy, targetAvailableCapacity);
@@ -61,10 +61,10 @@ Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
     } else {
         let resource = this.pos.findDroppedEnergy();
         if (resource) {
-            pickupOrMoveTo.call(this, resource);
+            this.pickupOrMoveTo(resource);
         } else {
             let storage = this.pos.findStorage();
-            withdrawOrMoveTo.call(this, storage, RESOURCE_ENERGY);
+            this.withdrawOrMoveTo(storage, RESOURCE_ENERGY);
         }
     }
 };
@@ -90,38 +90,6 @@ function getCarryEvent() {
 function isCarryEvent(event) {
     return event.type === EVENT__TRANSPORT_RESOURCES ||
         event.type === EVENT__HIRE_TO_TRANSPORTING_ENERGY;
-}
-
-function pickupOrMoveTo(resource) {
-    if (this.pos.isNearTo(resource.pos)) {
-        return this.pickup(resource);
-    } else {
-        this.moveTo(resource.pos);
-    }
-}
-
-function dropOrMoveTo(pos, resourceType) {
-    if (this.pos === pos) {
-        return this.drop(resourceType);
-    } else {
-        this.moveTo(pos);
-    }
-}
-
-function withdrawOrMoveTo(storage, resourceType) {
-    if (this.pos.isNearTo(storage.pos)) {
-        return this.withdraw(storage, resourceType);
-    } else {
-        this.moveTo(storage.pos);
-    }
-}
-
-function transferOrMoveTo(storage, resourceType) {
-    if (this.pos.isNearTo(storage.pos)) {
-        return this.transfer(storage, resourceType);
-    } else {
-        this.moveTo(storage.pos);
-    }
 }
 
 function finishEvent() {

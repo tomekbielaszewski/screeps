@@ -35,20 +35,12 @@ Creep.prototype[ROLE_UPGRADER] = {
     },
     work: function () {
         states[this.memory.state].call(this);
-
-        // let controller = this.room.controller;
-        //
-        // if (this.pos.isNearTo(controller)) {
-        //     upgrade.call(this, controller);
-        // } else {
-        //     this.moveTo(controller.pos);
-        // }
     }
 };
 
 function collectFirstEnergyPacket() {
     const storage = this.pos.findStorage();
-    if (this.pos.isNearTo(storage.pos)) {
+    if (this.pos.isNearTo(storage.pos)) { //TODO replace with newly added actions
         const result = this.withdraw(storage, RESOURCE_ENERGY);
         if (result === OK) {
             this.log('Sources withdrawn. Advancing from state 0 to state 1');
@@ -165,7 +157,7 @@ function buildContainer() {
 
     if(constructionSite) {
         if (this.isCarryingSomething()) {
-            buildOrMoveTo.call(this, constructionSite);
+            this.buildOrMoveTo(constructionSite);
         }
     } else {
         if(getContainerForUpgrader()) {
@@ -174,24 +166,6 @@ function buildContainer() {
         } else {
             this.log('Somethings fucky! There is no construction site nor container and upgraded is in state 3');
         }
-    }
-}
-
-
-//TODO przenies do creep.js
-function buildOrMoveTo(constructionSite) {
-    if (this.pos.isNearTo(constructionSite.pos)) {
-        return this.build(constructionSite);
-    } else {
-        this.moveTo(constructionSite.pos);
-    }
-}
-
-function withdrawOrMoveTo(storage, resourceType) {
-    if (this.pos.isNearTo(storage.pos)) {
-        return this.withdraw(storage, resourceType);
-    } else {
-        this.moveTo(storage.pos);
     }
 }
 
