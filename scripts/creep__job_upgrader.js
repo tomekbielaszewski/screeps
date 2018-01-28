@@ -166,6 +166,8 @@ function buildContainer() {
     }
 }
 
+//TODO save 'hired' state somehow: what if upgrader dies and hires carriers again? Then we will have 4 carriers supplying one room controller
+//TODO hire carriers for infinite energy
 function hireCreepToBringEnergyForUpgradingRoomController() {
     const container = getContainerForUpgrader.call(this);
     eventSystem.publish({
