@@ -167,29 +167,26 @@ function buildContainer() {
 }
 
 function hireCreepToBringEnergyForUpgradingRoomController() {
-
+    const container = getContainerForUpgrader.call(this);
+    eventSystem.publish({
+        type: EVENT__HIRE_TO_TRANSPORTING_ENERGY,
+        target: container.id,
+        amount: 100000
+    });
+    eventSystem.publish({
+        type: EVENT__HIRE_TO_TRANSPORTING_ENERGY,
+        target: container.id,
+        amount: 100000
+    });
+    this.memory.state = 5;
+    this.log(`2x Carrier hired. Advancing from state 4 to 5`);
 }
 
 function upgradeRoomController() {
-
-}
-
-function upgrade(controller) {
-    if (this.isCarrying(RESOURCE_ENERGY)) {
-        this.upgradeController(controller);
+    if(this.isCarrying(RESOURCE_ENERGY)) {
+        this.upgradeOrMoveTo(this.room.controller);
     } else {
-        let resource = this.pos.findDroppedEnergy();
-        if (this.pos.isNearTo(resource.pos)) {
-            this.pickup(resource);
-            this.memory.eventSent = false;
-        } else {
-            if (!this.memory.eventSent) {
-                eventSystem.publish({
-                    type: EVENT__TRANSPORT_RESOURCES,
-                    target: this.pos
-                });
-                this.memory.eventSent = true;
-            }
-        }
+        const container = getContainerForUpgrader.call(this);
+        this.withdrawOrMoveTo(container, RESOURCE_ENERGY);
     }
 }
