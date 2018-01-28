@@ -58,12 +58,8 @@ Spawn.prototype.spawn = function(role, body) {
     let result = this.spawnCreep(body, name, memory);
 
     if (result !== OK) {
-        logUnsuccessfulSpawn.call(this, result);
-        // this.log(`${body}, ${name}, ${JSON.stringify(memory)}`);
-
-        if(isSevere(result)) {
-            Game.notify(`One of errors [ERR_NOT_OWNER, ERR_NAME_EXISTS, ERR_INVALID_ARGS, ERR_RCL_NOT_ENOUGH] occurred 
-            when spawning creep in spawn[${this.name}], check logs from Game.time = ${Game.time}`, 60);
+        if(isSevere(result) && result !== ERR_NOT_ENOUGH_ENERGY) {
+            this.log(`Error[${fromErrorCode(result)}] occurred when spawning creep in spawn[${this.name}]`);
         }
         return {
             success: false,
@@ -87,29 +83,5 @@ function createQueueElement(role, body, amount, priority) {
         body: body,
         amount: amount,
         priority: priority
-    }
-}
-
-function logUnsuccessfulSpawn(result) {
-    switch (result) {
-        case ERR_NOT_OWNER:
-            this.log('ERR_NOT_OWNER');
-            break;
-        case ERR_NAME_EXISTS:
-            this.log('ERR_NAME_EXISTS');
-            break;
-        case ERR_BUSY:
-            this.log('ERR_BUSY');
-            break;
-        case ERR_NOT_ENOUGH_ENERGY:
-            break;
-        case ERR_INVALID_ARGS:
-            this.log('ERR_INVALID_ARGS');
-            break;
-        case ERR_RCL_NOT_ENOUGH:
-            this.log('ERR_RCL_NOT_ENOUGH');
-            break;
-        default:
-            this.log(`Unknown error code: ${result}`);
     }
 }
