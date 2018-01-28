@@ -58,7 +58,7 @@ Spawn.prototype.spawn = function(role, body) {
     let result = this.spawnCreep(body, name, memory);
 
     if (result !== OK) {
-        this.logUnsuccessfulSpawn(result);
+        logUnsuccessfulSpawn.call(this, result);
         // this.log(`${body}, ${name}, ${JSON.stringify(memory)}`);
 
         if(isSevere(result)) {
@@ -90,7 +90,7 @@ function createQueueElement(role, body, amount, priority) {
     }
 }
 
-Spawn.prototype.logUnsuccessfulSpawn = function (result) {
+function logUnsuccessfulSpawn(result) {
     switch (result) {
         case ERR_NOT_OWNER:
             this.log('ERR_NOT_OWNER');
@@ -112,4 +112,4 @@ Spawn.prototype.logUnsuccessfulSpawn = function (result) {
         default:
             this.log(`Unknown error code: ${result}`);
     }
-};
+}
