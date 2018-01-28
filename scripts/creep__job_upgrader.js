@@ -40,16 +40,13 @@ Creep.prototype[ROLE_UPGRADER] = {
 
 function collectFirstEnergyPacket() {
     const storage = this.pos.findStorage();
-    if (this.pos.isNearTo(storage.pos)) { //TODO replace with newly added actions
-        const result = this.withdraw(storage, RESOURCE_ENERGY);
-        if (result === OK) {
-            this.log('Sources withdrawn. Advancing from state 0 to state 1');
-            this.memory.state = 1;
-            return;
-        }
-        this.log(`Could not withdraw resources, result was: ${result}`);
-    } else {
-        this.moveTo(storage.pos);
+
+    const result = this.withdrawOrMoveTo(storage);
+    if (result === OK) {
+        this.log('Sources withdrawn. Advancing from state 0 to state 1');
+        this.memory.state = 1;
+    } else if(isSevere(result)) {
+        this.log(`Could not withdraw resources, result was severe: ${result}`);
     }
 }
 
