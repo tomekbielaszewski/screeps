@@ -6,6 +6,14 @@ Creep.prototype.buildOrMoveTo = function(constructionSite) {
     }
 };
 
+Creep.prototype.upgradeOrMoveTo = function(roomController) {
+    if (this.pos.inRangeTo(roomController.pos, 3)) {
+        return this.upgradeController(roomController);
+    } else {
+        this.moveTo(roomController.pos);
+    }
+};
+
 Creep.prototype.withdrawOrMoveTo = function(storage, resourceType) {
     if (this.pos.isNearTo(storage.pos)) {
         return this.withdraw(storage, resourceType);
