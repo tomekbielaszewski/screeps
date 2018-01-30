@@ -26,7 +26,7 @@ const states = [
 
 Creep.prototype[ROLE_UPGRADER] = {
     onSpawn: function () {
-        this.memory.state = 0;
+        setState.call(this, 0);
 
         Memory.roomControllers = Memory.roomControllers || {};
         Memory.roomControllers[this.room.name] = Memory.roomControllers[this.room.name] || {};
@@ -43,9 +43,8 @@ function collectFirstEnergyPacket() {
 
     const result = this.withdrawOrMoveTo(storage);
     if (result === OK) {
-        this.log('Sources withdrawn. Advancing from state 0 to state 1');
-        this.memory.state = 1;
-    } else if(isSevere(result)) {
+        setState.call(this, 1, 'Sources withdrawn');
+    } else if (isSevere(result)) {
         this.log(`Could not withdraw resources, result was severe: ${result}`);
     }
 }
@@ -55,7 +54,7 @@ function createContainerConstructionSite() {
     const container = getContainerForUpgrader.call(this);
     const containerConstructionSite = getContainerConstructionSiteForUpgrader.call(this);
     const containerOrConstructionSite = container || containerConstructionSite;
-    if(!containerOrConstructionSite) {
+    if (!containerOrConstructionSite) {
         const pos = this.room.controller.pos;
 
         const buildablePositions = _(potentialBuildablePositions.call(this, pos))
@@ -76,16 +75,14 @@ function createContainerConstructionSite() {
             this.log('No buildable position available');
         }
     } else {
-        if(container) {
-            this.log(`Container exist. Advancing from state 1 to 4`);
-            this.memory.state = 4;
+        if (container) {
+            setState.call(this, 4, 'Container exist');
 
             Memory.roomControllers[this.room.name].container = container.id;
             return;
         }
-        if(containerConstructionSite) {
-            this.log(`Container construction site exist. Advancing from state 1 to 2`);
-            this.memory.state = 2;
+        if (containerConstructionSite) {
+            setState.call(this, 2, 'Container construction site exist');
 
             this.log(this.room.name);
             Memory.roomControllers[this.room.name].containerConstructionSite = containerConstructionSite.id;
@@ -99,7 +96,7 @@ function getContainerForUpgrader() {
     const existingContainerId = Memory.roomControllers[this.room.name].container;
     let existingContainer = Game.getObjectById(existingContainerId);
 
-    if(!existingContainer) {
+    if (!existingContainer) {
         existingContainer = _(potentialBuildablePositions.call(this, this.room.controller.pos))
             .map(pos => pos.lookFor(LOOK_STRUCTURES))
             .filter(structureArray => structureArray && structureArray.length > 0)
@@ -114,7 +111,7 @@ function getContainerConstructionSiteForUpgrader() {
     const existingContainerConstructionSiteId = Memory.roomControllers[this.room.name].containerConstructionSite;
     let existingContainerConstructionSite = Game.getObjectById(existingContainerConstructionSiteId);
 
-    if(!existingContainerConstructionSite) {
+    if (!existingContainerConstructionSite) {
         existingContainerConstructionSite = _(potentialBuildablePositions.call(this, this.room.controller.pos))
             .map(pos => pos.lookFor(LOOK_CONSTRUCTION_SITES))
             .filter(constructionSiteArray => constructionSiteArray && constructionSiteArray.length > 0)
@@ -145,21 +142,19 @@ function hireCreepsToBringEnergyForContainerBuilding() {
         target: this.id,
         amount: 2500
     });
-    this.log(`2x Carrier hired. Advancing from state 2 to 3`);
-    this.memory.state = 3;
+    setState.call(this, 3, '2x Carrier hired');
 }
 
 function buildContainer() {
     const constructionSite = getContainerConstructionSiteForUpgrader.call(this);
 
-    if(constructionSite) {
+    if (constructionSite) {
         if (this.isCarryingSomething()) {
             this.buildOrMoveTo(constructionSite);
         }
     } else {
-        if(getContainerForUpgrader()) {
-            this.memory.state = 4;
-            this.log(`Container built. Advancing from state 3 to 4`);
+        if (getContainerForUpgrader()) {
+            setState.call(this, 4, 'Container built');
         } else {
             this.log('Somethings fucky! There is no construction site nor container and upgraded is in state 3');
         }
@@ -180,15 +175,22 @@ function hireCreepToBringEnergyForUpgradingRoomController() {
         target: container.id,
         amount: 100000
     });
-    this.memory.state = 5;
-    this.log(`2x Carrier hired. Advancing from state 4 to 5`);
+    setState.call(this, 5, '2x Carrier hired');
 }
 
 function upgradeRoomController() {
-    if(this.isCarrying(RESOURCE_ENERGY)) {
+    if (this.isCarrying(RESOURCE_ENERGY)) {
         this.upgradeOrMoveTo(this.room.controller);
     } else {
         const container = getContainerForUpgrader.call(this);
         this.withdrawOrMoveTo(container, RESOURCE_ENERGY);
     }
+}
+
+function setState(state, message) {
+    if (message) {
+        const oldState = this.memory.state;
+        this.log(`${message}. Advancing from state ${oldState} to ${state}`);
+    }
+    this.memory.state = state;
 }
