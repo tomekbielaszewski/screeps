@@ -16,26 +16,6 @@ Creep.prototype[ROLE_CARRIER] = {
     }
 };
 
-Creep.prototype[EVENT__TRANSPORT_RESOURCES] = function (event) {
-    if (this.isCapacityFull()) {
-        let target = Game.deserializeRoomPosition(event.target);
-        let result = this.dropOrMoveTo(target, RESOURCE_ENERGY);
-        if (result === OK) {
-            finishEvent.call(this);
-            return;
-        }
-        if (result) this.log(`Event ${event.type} did not finish properly. Result of last operation was: ${result}`);
-    } else {
-        let resource = this.pos.findDroppedEnergy();
-        if (resource) {
-            this.pickupOrMoveTo(resource);
-        } else {
-            let storage = this.pos.findStorage();
-            this.withdrawOrMoveTo(storage, RESOURCE_ENERGY);
-        }
-    }
-};
-
 //TODO dodaj pauzę na wyciaganie surowców ze spawnu/extensionów kiedy w kolejce budowania jest wysoko priorytetowa jednostak (mobileworker/warrior etc)
 Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
     if (this.isCarryingSomething()) {
@@ -88,8 +68,7 @@ function getCarryEvent() {
 }
 
 function isCarryEvent(event) {
-    return event.type === EVENT__TRANSPORT_RESOURCES ||
-        event.type === EVENT__HIRE_TO_TRANSPORTING_ENERGY;
+    return event.type === EVENT__HIRE_TO_TRANSPORTING_ENERGY;
 }
 
 function finishEvent() {
