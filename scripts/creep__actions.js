@@ -39,7 +39,7 @@ Creep.prototype.transferOrMoveTo = function(storage, resourceType) {
 };
 
 Creep.prototype.dropOrMoveTo = function(pos, resourceType) {
-    if (this.pos === pos) { //TODO zle porownanie - porownuj przez equal albo isNearTo
+    if (this.pos.isEqualTo(pos)) {
         return this.drop(resourceType);
     } else {
         this.moveTo(pos);
