@@ -11,6 +11,8 @@ Spawn.prototype.enqueue = function (creepRole, creepBody, amount, priority) {
     if (!el) {
         queue.push(createQueueElement(creepRole, creepBody, amount, priority));
         queue = sortByPriority(queue);
+        //TODO attach this var to global memory. this will allow pausing withdrawal from extensions as well
+        this.memory.highPriorityCreepUnderConstruction = isHighPriority(priority);
         this.memory.queue = queue;
         this.log(`${amount}x ${creepRole} added to queue. New queue length: ${queue.length}`);
     } else {
@@ -75,6 +77,10 @@ function sortByPriority(queue) {
     return _.sortBy(queue, function (el) {
         return el.priority
     })
+}
+
+function isHighPriority(priority) {
+    return priority > 900;
 }
 
 function createQueueElement(role, body, amount, priority) {

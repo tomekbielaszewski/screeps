@@ -44,6 +44,10 @@ Creep.prototype[EVENT__HIRE_TO_TRANSPORTING_ENERGY] = function (event) {
             this.pickupOrMoveTo(resource);
         } else {
             let storage = this.pos.findStorage();
+            if(storage.memory && storage.memory.highPriorityCreepUnderConstruction) {
+                this.log(`High priority creep is under construction. Pausing spawn withdrawal`);
+                return;
+            }
             this.withdrawOrMoveTo(storage, RESOURCE_ENERGY);
         }
     }
