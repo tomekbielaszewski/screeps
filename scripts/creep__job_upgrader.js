@@ -26,7 +26,7 @@ const states = [
 
 Creep.prototype[ROLE_UPGRADER] = {
     onSpawn: function () {
-        setState.call(this, 0);
+        this.setState(0);
 
         Memory.roomControllers = Memory.roomControllers || {};
         Memory.roomControllers[this.room.name] = Memory.roomControllers[this.room.name] || {};
@@ -34,7 +34,7 @@ Creep.prototype[ROLE_UPGRADER] = {
     onDie: function () {
     },
     work: function () {
-        states[this.memory.state].call(this);
+        this.executeState(states);
     }
 };
 
@@ -43,7 +43,7 @@ function collectFirstEnergyPacket() {
 
     const result = this.withdrawOrMoveTo(storage);
     if (result === OK) {
-        setState.call(this, 1, 'Sources withdrawn');
+        this.setState(1, 'Sources withdrawn');
     } else if (isSevere(result)) {
         this.log(`Could not withdraw resources, result was severe: ${result}`);
     }
@@ -76,13 +76,13 @@ function createContainerConstructionSite() {
         }
     } else {
         if (container) {
-            setState.call(this, 4, 'Container exist');
+            this.setState(4, 'Container exist');
 
             Memory.roomControllers[this.room.name].container = container.id;
             return;
         }
         if (containerConstructionSite) {
-            setState.call(this, 2, 'Container construction site exist');
+            this.setState(2, 'Container construction site exist');
 
             this.log(this.room.name);
             Memory.roomControllers[this.room.name].containerConstructionSite = containerConstructionSite.id;
@@ -142,7 +142,7 @@ function hireCreepsToBringEnergyForContainerBuilding() {
         target: this.id,
         amount: 2500
     });
-    setState.call(this, 3, '2x Carrier hired');
+    this.setState(3, '2x Carrier hired');
 }
 
 function buildContainer() {
@@ -154,7 +154,7 @@ function buildContainer() {
         }
     } else {
         if (getContainerForUpgrader()) {
-            setState.call(this, 4, 'Container built');
+            this.setState(4, 'Container built');
         } else {
             this.log('Somethings fucky! There is no construction site nor container and upgraded is in state 3');
         }
@@ -175,7 +175,7 @@ function hireCreepToBringEnergyForUpgradingRoomController() {
         target: container.id,
         amount: 100000
     });
-    setState.call(this, 5, '2x Carrier hired');
+    this.setState(5, '2x Carrier hired');
 }
 
 function upgradeRoomController() {
@@ -185,12 +185,4 @@ function upgradeRoomController() {
         const container = getContainerForUpgrader.call(this);
         this.withdrawOrMoveTo(container, RESOURCE_ENERGY);
     }
-}
-
-function setState(state, message) {
-    if (message) {
-        const oldState = this.memory.state;
-        this.log(`${message}. Advancing from state ${oldState} to ${state}`);
-    }
-    this.memory.state = state;
 }

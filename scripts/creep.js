@@ -31,3 +31,19 @@ Creep.prototype.isCarryingSomething = function () {
 Creep.prototype.isCarrying = function (resourceType) {
     return this.carry[resourceType] > 0;
 };
+
+Creep.prototype.executeState = function (stateExecutors) {
+    stateExecutors[this.getState()]();
+};
+
+Creep.prototype.setState = function(state, message) {
+    if (message) {
+        const oldState = this.memory.state;
+        this.log(`${message}. Advancing from state ${oldState} to ${state}`);
+    }
+    this.memory.state = state;
+};
+
+Creep.prototype.getState = function() {
+    return this.memory.state;
+};

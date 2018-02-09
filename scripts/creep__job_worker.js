@@ -7,11 +7,12 @@ const states = [
 
 Creep.prototype[ROLE_WORKER] = {
     onSpawn: function () {
+        this.setState(0);
     },
     onDie: function () {
     },
     work: function () {
-        states[this.memory.state].call(this);
+        this.executeState(states);
     }
 };
 
@@ -25,13 +26,5 @@ function hireCarrierToCollectResources() {
         type: EVENT__HIRE_TO_COLLECT_ENERGY,
         target: this.id
     });
-    setState.call(this, 1, 'Carrier hired for collecting energy');
-}
-
-function setState(state, message) {
-    if (message) {
-        const oldState = this.memory.state;
-        this.log(`${message}. Advancing from state ${oldState} to ${state}`);
-    }
-    this.memory.state = state;
+    this.setState(1, 'Carrier hired for collecting energy');
 }
